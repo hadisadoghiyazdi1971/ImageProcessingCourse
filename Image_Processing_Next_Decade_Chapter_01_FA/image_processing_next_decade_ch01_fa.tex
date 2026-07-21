@@ -1,0 +1,1292 @@
+% !TeX program = xelatex
+% !TeX encoding = UTF-8
+\documentclass[12pt,openany,oneside]{book}
+
+\usepackage[a4paper,top=25mm,bottom=25mm,left=27mm,right=27mm,headheight=16pt]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,mathtools,bm}
+\usepackage{amsthm}
+\usepackage{booktabs,longtable,array,multirow,tabularx}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,shapes.geometric,decorations.pathreplacing,matrix}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{xepersian}
+
+\settextfont[Scale=1.08]{Amiri}
+\setlatintextfont{DejaVu Serif}
+\setmonofont{DejaVu Sans Mono}
+\setdigitfont{Amiri}
+
+\definecolor{DeepBlue}{HTML}{163A5F}
+\definecolor{Accent}{HTML}{B34B35}
+\definecolor{SoftBlue}{HTML}{EAF2F8}
+\definecolor{SoftGold}{HTML}{FFF6DF}
+\definecolor{SoftGreen}{HTML}{EAF7EF}
+\definecolor{SoftRed}{HTML}{FCEDEC}
+\definecolor{SoftGray}{HTML}{F4F5F6}
+\definecolor{CodeGray}{HTML}{F7F7F7}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=DeepBlue,
+  citecolor=Accent,
+  urlcolor=Accent,
+  pdftitle={پردازش تصویر در دهه آینده: از عمق ریاضیات تا مهندس حرفه‌ای},
+  pdfauthor={جزوه درس کارشناسی ارشد}
+}
+
+\setstretch{1.22}
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{1.3em}
+\setlist[itemize]{itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{itemsep=0.25em,topsep=0.35em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\small\thepage}
+\fancyhead[RE]{\small پردازش تصویر در دهه آینده}
+\fancyhead[LO]{\small\nouppercase{\leftmark}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{DeepBlue}}
+  {\filleft\Large فصل \thechapter}
+  {8pt}
+  {\filright}
+\titleformat{\section}{\Large\bfseries\color{DeepBlue}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{Accent}}{\thesubsection}{0.7em}{}
+
+\newtheorem{definition}{تعریف}[chapter]
+\newtheorem{theorem}{قضیه}[chapter]
+\newtheorem{proposition}{گزاره}[chapter]
+\newtheorem{lemma}{لم}[chapter]
+\newtheorem{example}{مثال}[chapter]
+\newtheorem{remark}{نکته}[chapter]
+
+\newtcolorbox{learningbox}{
+  colback=SoftBlue,colframe=DeepBlue,title=اهداف یادگیری,
+  fonttitle=\bfseries,breakable,enhanced}
+\newtcolorbox{keybox}[1][]{
+  colback=SoftGold,colframe=Accent,title={#1},
+  fonttitle=\bfseries,breakable,enhanced}
+\newtcolorbox{futurebox}{
+  colback=SoftGreen,colframe=green!50!black,title=پل به دهه آینده,
+  fonttitle=\bfseries,breakable,enhanced}
+\newtcolorbox{warningbox}{
+  colback=SoftRed,colframe=red!65!black,title=خطای رایج,
+  fonttitle=\bfseries,breakable,enhanced}
+\newtcolorbox{workshopbox}[1][]{
+  colback=SoftGray,colframe=black!55,title={کارگاه خانگی پردازش تصویر: #1},
+  fonttitle=\bfseries,breakable,enhanced}
+\newtcolorbox{videobox}{
+  colback=white,colframe=DeepBlue,title=تقسیم پیشنهادی ویدئوهای ۱۵ دقیقه‌ای,
+  fonttitle=\bfseries,breakable,enhanced}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\inner}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\trans}{^{\mathsf T}}
+\newcommand{\lrterm}[1]{\lr{#1}}
+\newcommand{\vect}[1]{\bm{#1}}
+\newcommand{\op}[1]{\mathcal{#1}}
+
+\lstset{
+  language=Python,
+  basicstyle=\small\ttfamily,
+  backgroundcolor=\color{CodeGray},
+  frame=single,
+  rulecolor=\color{black!25},
+  numbers=left,
+  numberstyle=\tiny,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\bfseries,
+  commentstyle=\itshape,
+  tabsize=4
+}
+
+\begin{document}
+
+% -----------------------------------------------------------------------------
+% Title page
+% -----------------------------------------------------------------------------
+\begin{titlepage}
+\centering
+\vspace*{1.2cm}
+{\color{DeepBlue}\rule{0.88\textwidth}{1.1pt}}\\[1.2cm]
+{\Huge\bfseries پردازش تصویر در دهه آینده\\[0.35cm]}
+{\LARGE\bfseries از عمق ریاضیات تا مهندس حرفه‌ای\\[0.9cm]}
+{\Large کتاب ـ جزوه درس کارشناسی ارشد و آزمایشگاه پژوهش‌محور\\[1.3cm]}
+
+\begin{tikzpicture}[node distance=8mm]
+\node[draw=DeepBlue,very thick,rounded corners=3mm,fill=SoftBlue,
+      minimum width=12.8cm,minimum height=3.2cm,align=center] (a)
+{\Large\bfseries فصل اول\\[2mm]
+\large تصویر به‌مثابه اندازه‌گیری، تابع و عملگر\\[1mm]
+\normalsize از تشکیل فیزیکی تصویر تا صورت‌بندی مسائل معکوس};
+\node[below=7mm of a,align=center,text width=13cm] {
+این کتاب مبانی کلاسیک را حذف نمی‌کند؛ آن‌ها را با زبان ریاضی واحدی بازسازی می‌کند که
+به پردازش آماری، بهینه‌سازی، یادگیری عمیق، مدل‌های مولد، مدل‌های بنیادی و تصویربرداری محاسباتی متصل می‌شود.};
+\end{tikzpicture}
+
+\vfill
+{\large نسخه آغازین درس ـ تابستان ۱۴۰۵ / ۲۰۲۶}\\[0.4cm]
+{\normalsize قابل کامپایل با \lr{TeX Live + TeXstudio + XeLaTeX}}\\[0.8cm]
+{\color{DeepBlue}\rule{0.88\textwidth}{1.1pt}}
+\end{titlepage}
+
+\frontmatter
+
+% -----------------------------------------------------------------------------
+\chapter*{پیشگفتار}
+\addcontentsline{toc}{chapter}{پیشگفتار}
+
+پردازش تصویر در آستانه یک تغییر ساده از «روش‌های کلاسیک» به «یادگیری عمیق» نیست؛
+بلکه در حال تبدیل‌شدن به دانشی است که در آن پنج لایه به‌طور هم‌زمان حضور دارند:
+فیزیک تشکیل تصویر، ریاضیات نمایش و تبدیل، آمار و عدم‌قطعیت، بهینه‌سازی و یادگیری از داده،
+و در نهایت مهندسی سامانه‌ای که باید در جهان واقعی قابل اعتماد، سریع و بازتولیدپذیر باشد.
+
+در یک نگاه سطحی ممکن است تصور شود که با وجود مدل‌های بزرگ، دیگر نیازی به مطالعه دقیق
+نمونه‌برداری، تبدیل فوریه، کانولوشن، هندسه تصویری، تخمین آماری یا مسائل معکوس نیست.
+این تصور خطرناک است. مدل‌های جدید، قوانین فیزیکی حسگر، محدودیت اطلاعات، ناپایداری وارون‌سازی،
+سوگیری داده و هزینه محاسبات را حذف نمی‌کنند؛ تنها ابزار تازه‌ای برای مدل‌کردن «پیشین» و
+ساخت نمایش‌های عمومی‌تر فراهم می‌آورند. ظهور معماری‌های ترنسفورمری در بینایی،
+یادگیری خودنظارتی در مقیاس بزرگ، مدل‌های قابل‌پرامپت برای قطعه‌بندی و مدل‌های دیفیوژن،
+بیانگر آن است که مهندس آینده باید هم زبان پیکسل و عملگر را بداند و هم زبان توکن، نمایش،
+امتیاز و پرامپت را \cite{dosovitskiy2021vit,he2022mae,kirillov2023sam,ho2020ddpm,oquab2024dinov2}.
+
+از سوی دیگر، تصویربرداری محاسباتی مرز میان «دوربین» و «الگوریتم» را از بین برده است:
+سامانه اپتیکی، الگوی نمونه‌برداری و الگوریتم بازسازی به‌صورت مشترک طراحی می‌شوند و تصویر
+ممکن است مستقیماً روی حسگر تشکیل نشود، بلکه از اندازه‌گیری‌های کدگذاری‌شده بازسازی گردد
+\cite{computationalimaging2026,zuo2022optical}. بنابراین، کتابی برای دهه آینده نباید از
+فیلترگذاری آغاز کند؛ باید از این پرسش آغاز کند که «تصویر چیست و چگونه به داده تبدیل می‌شود؟»
+
+این متن برای دانشجوی کارشناسی ارشد نوشته شده است، اما انتظار ریاضی آن عمداً بالاست.
+هر فصل قرار است یک جزوه نسبتاً مستقل، یک مجموعه ویدئوی کوتاه، یک آزمایش محاسباتی،
+یک تمرین اثباتی و یک مسئله مهندسی واقعی تولید کند. تجهیز هر دانشجو به
+\lr{TeXstudio + TeX Live}، محیط برنامه‌نویسی پایتون، و یک دستیار کدنویسی و گفت‌وگویی
+مانند \lr{Codex} و \lr{ChatGPT}، آزمایشگاه پردازش تصویر را از یک اتاق محدود دانشگاهی
+به خانه دانشجو منتقل می‌کند؛ اما مسئولیت صحت ریاضی، طراحی آزمایش و تفسیر نتیجه همچنان
+بر عهده پژوهشگر است.
+
+\enlargethispage{3\baselineskip}
+\begin{keybox}[فلسفه مرکزی کتاب]
+در سراسر کتاب، هر روش با سه سؤال بازسازی می‌شود:
+\begin{enumerate}
+\item داده چگونه و با چه عملگری تولید شده است؟
+\item چه اطلاعاتی از مجهول در اندازه‌گیری باقی مانده و چه اطلاعاتی از دست رفته است؟
+\item کدام پیشین، قید، داده آموزشی یا مدل مولد می‌تواند فضای پاسخ‌ها را محدود کند؟
+\end{enumerate}
+\end{keybox}
+
+% -----------------------------------------------------------------------------
+\chapter*{چگونه از این کتاب استفاده کنیم؟}
+\addcontentsline{toc}{chapter}{چگونه از این کتاب استفاده کنیم؟}
+
+هر فصل از شش لایه تشکیل می‌شود:
+\begin{enumerate}
+\item \textbf{لایه شهودی:} صورت مسئله، مثال واقعی و تصویر ذهنی؛
+\item \textbf{لایه ریاضی:} تعریف‌ها، قضایا، اثبات‌ها و تحلیل پایداری؛
+\item \textbf{لایه الگوریتمی:} تبدیل مدل به یک روش عددی قابل اجرا؛
+\item \textbf{لایه محاسباتی:} پیاده‌سازی کنترل‌شده و آزمون واحد؛
+\item \textbf{لایه پژوهشی:} مقایسه روش‌های کلاسیک و جدید و آشکارکردن شکاف‌ها؛
+\item \textbf{لایه مهندسی:} زمان اجرا، حافظه، خطا، بازتولیدپذیری و گزارش حرفه‌ای.
+\end{enumerate}
+
+\section*{قرارداد آموزشی پیشنهادی}
+برای هر فصل، دانشجو باید چهار خروجی تحویل دهد:
+\begin{itemize}
+\item یک گزارش کوتاه \LaTeX{} که روابط اصلی را با بیان خود بازنویسی کند؛
+\item یک مخزن کد با فایل \lr{README}، محیط قابل بازتولید و آزمون‌های پایه؛
+\item یک آزمایش که در آن یک فرض مهم عمداً شکسته شود؛
+\item یک ویدئوی پنج‌دقیقه‌ای که نتیجه را بدون پنهان‌کردن شکست‌ها توضیح دهد.
+\end{itemize}
+
+\section*{ابزارهای پایه}
+\begin{longtable}{p{0.21\textwidth}p{0.7\textwidth}}
+\toprule
+\textbf{ابزار} & \textbf{کارکرد در درس}\\
+\midrule
+\endhead
+\lr{TeX Live + TeXstudio} & نگارش روابط، گزارش آزمایش، ساخت شکل‌های برداری و تولید نسخه نهایی کتابچه هر فصل.\\
+\lr{Python} & پیاده‌سازی عددی با \lr{NumPy, SciPy, scikit-image, OpenCV, Matplotlib} و در فصل‌های یادگیری با \lr{PyTorch}.\\
+\lr{Git} & ثبت تغییرات، بازگشت به نسخه‌های سالم، مقایسه آزمایش‌ها و تحویل حرفه‌ای.\\
+\lr{Codex/ChatGPT} & تولید اسکلت کد، نوشتن آزمون، توضیح خطا و پیشنهاد آزمایش؛ نه منبع نهایی حقیقت علمی.\\
+\lr{NotebookLM} & گفت‌وگو با مجموعه محدود منابع انتخاب‌شده برای مرور یک زیرموضوع یا ساخت طرح ویدئو.\\
+\bottomrule
+\end{longtable}
+
+% -----------------------------------------------------------------------------
+\chapter*{نقشه کل کتاب و درس}
+\addcontentsline{toc}{chapter}{نقشه کل کتاب و درس}
+
+ساختار زیر عمداً از یک تقسیم‌بندی صرفاً تاریخی فاصله می‌گیرد. مبانی کلاسیک حفظ شده‌اند،
+اما هر بخش به یک مفهوم ماندگار برای دهه آینده متصل است.
+
+\begin{longtable}{p{0.06\textwidth}p{0.29\textwidth}p{0.55\textwidth}}
+\toprule
+\textbf{فصل} & \textbf{عنوان} & \textbf{هسته علمی و پل آینده}\\
+\midrule
+\endhead
+۱ & تصویر به‌مثابه اندازه‌گیری، تابع و عملگر & تشکیل تصویر، فضاهای تابعی، عملگر پیشرو، بدوضعی و زبان واحد مسائل معکوس.\\
+۲ & دیجیتالی‌شدن جهان دیداری & نمونه‌برداری، کوانتیزه‌سازی، علیاسینگ، دامنه دینامیکی، رنگ‌سنجی، \lr{HDR} و داده‌های چندطیفی.\\
+۳ & سامانه‌های خطی و تحلیل فرکانسی & کانولوشن، پاسخ ضربه، فوریه، فیلترها، موجک و نمایش چندمقیاسی؛ مقدمه‌ای برای فیلترهای آموختنی.\\
+۴ & تصویر تصادفی و مدل‌های نویز & میدان تصادفی، نویز گاوسی، پواسون، ضربه‌ای و وابسته به سیگنال؛ تخمین و آزمون آماری.\\
+۵ & بهبود، حذف نویز و بازسازی & وینر، تیکانوف، تغییرات کلی، بهینه‌سازی پروگزیمال، \lr{PnP} و بازکردن تکرارها به شبکه.\\
+۶ & هندسه تصویر و دوربین & هندسه تصویری، کالیبراسیون، هموگرافی، تبدیل مختصات، بازنمونه‌برداری و ثبت تصویر.\\
+۷ & ساختارهای محلی و مورفولوژی & مشتق، لبه، گوشه، اسکلت، فاصله و مورفولوژی ریاضی؛ پیوند با سوگیری‌های ساختاری شبکه‌ها.\\
+۸ & قطعه‌بندی کلاسیک و تغییراتی & آستانه‌گذاری، ناحیه، گراف، کانتور فعال، \lr{Mumford--Shah} و \lr{level set}.\\
+۹ & ویژگی، تطبیق و بازشناسی کلاسیک & \lr{SIFT/HOG}, تطبیق مقاوم، \lr{RANSAC} و خط لوله کلاسیک قابل تفسیر.\\
+۱۰ & شبکه‌های کانولوشنی و نمایش سلسله‌مراتبی & کانولوشن آموختنی، میدان پذیرش، نرمال‌سازی، باقیمانده، انتقال و کالیبراسیون.\\
+۱۱ & توجه، ترنسفورمر و یادگیری خودنظارتی & توکن‌سازی تصویر، توجه، مدل‌سازی ماسک‌شده، یادگیری تقابلی و ویژگی‌های عمومی.\\
+۱۲ & مدل‌های مولد و پیشین‌های آموخته‌شده & خودرمزگذار، \lr{VAE}, \lr{GAN}, مدل امتیاز و دیفیوژن؛ بازسازی و تولید کنترل‌شده.\\
+۱۳ & مدل‌های بنیادی و بینایی قابل‌پرامپت & مدل‌های بینایی ـ زبان، قطعه‌بندی قابل‌پرامپت، سازگارسازی کم‌پارامتر و ارزیابی انتقال.\\
+۱۴ & تصویربرداری محاسباتی و مدل‌های فیزیک‌آگاه & طراحی مشترک حسگر و الگوریتم، سنجش فشرده، فاز، توموگرافی، \lr{MRI} و یادگیری مقید به فیزیک.\\
+۱۵ & ویدئو، حرکت، سه‌بعد و میدان‌های عصبی & جریان نوری، رهگیری، بازسازی سه‌بعدی، \lr{NeRF} و نمایش‌های ضمنی.\\
+۱۶ & کیفیت، عدم‌قطعیت و اعتمادپذیری & معیارهای ادراکی، تغییر دامنه، خارج از توزیع، حمله، توهم بازسازی، انصاف و انسان در حلقه.\\
+۱۷ & مهندسی حرفه‌ای سامانه‌های تصویری & داده، نسخه‌بندی، آزمون، پروفایل حافظه، کم‌سازی، استقرار لبه، گزارش مدل و بازتولیدپذیری.\\
+۱۸ & استودیوی پایانی & پروژه کامل در پزشکی، صنعت، سنجش از دور، اسناد، رباتیک یا هنر با دفاع علمی و مهندسی.\\
+\bottomrule
+\end{longtable}
+
+\begin{futurebox}
+ترنسفورمرهای بینایی نشان دادند که تصویر می‌تواند به دنباله‌ای از وصله‌ها تبدیل شود؛
+خودرمزگذارهای ماسک‌شده و \lr{DINOv2} نشان دادند که نمایش‌های قوی را می‌توان بدون برچسب مستقیم آموخت؛
+\lr{SAM} مفهوم قطعه‌بندی قابل‌پرامپت را برجسته کرد؛ و مدل‌های دیفیوژن، حذف نویز را به هسته یک مدل مولد تبدیل کردند
+\cite{dosovitskiy2021vit,he2022mae,oquab2024dinov2,kirillov2023sam,ho2020ddpm}.
+این تحولات در فصل‌های بعد مطالعه می‌شوند، اما زبان ریاضی آن‌ها از همین فصل آغاز می‌شود.
+\end{futurebox}
+
+\section*{طرح پیشنهادی یک نیم‌سال ۱۴ هفته‌ای}
+\begin{longtable}{p{0.09\textwidth}p{0.35\textwidth}p{0.45\textwidth}}
+\toprule
+\textbf{هفته} & \textbf{درس} & \textbf{خروجی کارگاهی}\\
+\midrule
+\endhead
+۱ & فصل ۱: تصویر، اندازه‌گیری و عملگر & شبیه‌ساز ساده تشکیل تصویر و گزارش بدوضعی.\\
+۲ & فصل ۲: نمونه‌برداری، کوانتیزه‌سازی و رنگ & آزمایش علیاسینگ و دامنه دینامیکی.\\
+۳--۴ & فصل ۳: کانولوشن، فوریه و چندمقیاسی & طراحی فیلتر در فضا و فرکانس و تحلیل مرزی.\\
+۵ & فصل ۴: نویز و آمار تصویر & تخمین پارامتر نویز از داده خام.\\
+۶--۷ & فصل ۵: بازسازی و مسائل معکوس & مقایسه وینر، تیکانوف، \lr{TV} و یک پیشین آموخته‌شده.\\
+۸ & فصل ۶ و ۷: هندسه و ساختار محلی & ثبت دو تصویر و تحلیل خطای درون‌یابی.\\
+۹ & فصل ۸ و ۹: قطعه‌بندی و ویژگی کلاسیک & ساخت خط لوله کلاسیک قابل تفسیر.\\
+۱۰ & فصل ۱۰: \lr{CNN} & آموزش یک مدل کوچک با تحلیل میدان پذیرش.\\
+۱۱ & فصل ۱۱: ترنسفورمر و خودنظارتی & استخراج و نمایش ویژگی‌های مدل ازپیش‌آموزش‌دیده.\\
+۱۲ & فصل ۱۲ و ۱۳: دیفیوژن و مدل بنیادی & آزمایش بازسازی/قطعه‌بندی با پرامپت و تحلیل شکست.\\
+۱۳ & فصل ۱۴ و ۱۶: فیزیک، کیفیت و اعتماد & سنجش سازگاری داده و آشکارسازی توهم.\\
+۱۴ & فصل ۱۷ و استودیوی پایانی & دفاع پروژه، گزارش بازتولیدپذیری و نمایش زنده.\\
+\bottomrule
+\end{longtable}
+
+\tableofcontents
+
+\mainmatter
+
+% =============================================================================
+\chapter{تصویر به‌مثابه اندازه‌گیری، تابع و عملگر}
+\label{chap:image-as-measurement}
+
+\begin{learningbox}
+پس از مطالعه این فصل، دانشجو باید بتواند:
+\begin{enumerate}
+\item تصویر را پیش از دیجیتالی‌شدن به‌صورت یک میدان پیوسته فضایی ـ طیفی ـ زمانی تعریف کند؛
+\item زنجیره تشکیل تصویر را از تابش صحنه تا عدد ذخیره‌شده در حافظه مدل کند؛
+\item یک تصویر دیجیتال را به‌صورت تابع، ماتریس، بردار و تانسور نمایش دهد و میان این نمایش‌ها تبدیل انجام دهد؛
+\item عملگرهای خطی، ناوردا نسبت به انتقال و غیرخطی را تشخیص دهد؛
+\item مسئله پردازش تصویر را در قالب \(\vect y=\op A(\vect x)+\vect\eta\) بنویسد؛
+\item خوش‌وضعی یا بدوضعی مسئله را با هسته، مقادیر منفرد و حساسیت به نویز تحلیل کند؛
+\item نقش قید، منظم‌ساز، پیشین احتمالاتی و مدل آموخته‌شده را در بازسازی توضیح دهد؛
+\item یک آزمایش عددی بازتولیدپذیر برای تاری، نویز و وارون‌سازی طراحی کند.
+\end{enumerate}
+\end{learningbox}
+
+\section{چرا فصل نخست باید از «اندازه‌گیری» آغاز شود؟}
+
+در بسیاری از کتاب‌های کلاسیک، نخستین تعریف تصویر چنین است:
+«تصویر تابعی دوبعدی مانند \(f(x,y)\) است و مقدار تابع شدت روشنایی را نشان می‌دهد.»
+این تعریف برای آغاز مناسب است، اما برای مهندس دهه آینده کافی نیست؛ زیرا:
+\begin{itemize}
+\item مقدار ثبت‌شده الزاماً شدت واقعی صحنه نیست؛ حاصل اپتیک، پاسخ طیفی حسگر، نوردهی، نویز و پردازش داخلی دوربین است؛
+\item داده ممکن است دوبعدی نباشد: تصویر رنگی، ویدئو، داده حجمی، چندطیفی، قطبشی یا رویدادمحور تانسوری با ابعاد بیشتر است؛
+\item در بسیاری از سامانه‌ها، حسگر اصلاً تصویر مطلوب را مستقیماً اندازه نمی‌گیرد؛ برای مثال در توموگرافی، \lr{MRI}، بازیابی فاز یا تصویربرداری فشرده، داده مجموعه‌ای از اندازه‌گیری‌های غیرمستقیم است؛
+\item الگوریتم مدرن گاهی نه شدت پیکسل، بلکه توکن، ویژگی، توزیع، امتیاز یا نمایش ضمنی را پردازش می‌کند.
+\end{itemize}
+
+بنابراین نقطه شروع مناسب‌تر این است:
+
+\begin{keybox}[تعریف راهبردی]
+یک سامانه تصویری، جهان یا شیء ناشناخته \(x\) را به‌وسیله یک زنجیره فیزیکی و محاسباتی
+به داده مشاهده‌شده \(y\) تبدیل می‌کند. پردازش تصویر علم مدل‌کردن، تحلیل، تغییر، تفسیر
+یا وارون‌سازی این نگاشت است.
+\end{keybox}
+
+این تعریف، هم افزایش کنتراست ساده و هم بازسازی \lr{MRI}، هم قطعه‌بندی و هم تولید تصویر
+با دیفیوژن را در یک چارچوب قرار می‌دهد.
+
+\section{صحنه و تصویر پیوسته}
+
+\subsection{تابش صحنه}
+
+فرض کنید نقطه‌ای از جهان با مختصات فضایی \((X,Y,Z)\)، در طول موج \(\lambda\) و زمان \(t\)
+تابشی تولید یا بازتاب می‌کند. یک مدل غنی از صحنه می‌تواند به‌صورت میدان تابش
+\begin{equation}
+L=L(X,Y,Z,\theta,\phi,\lambda,t)
+\end{equation}
+نوشته شود که علاوه بر مکان، جهت انتشار \((\theta,\phi)\)، طول موج و زمان را نیز در بر دارد.
+دوربین معمولی تنها فرافکنی بسیار محدودی از این میدان پُربعد را ثبت می‌کند.
+
+برای یک سطح لامبرتی ساده، می‌توان وابستگی جهت را تقریباً حذف کرد و در یک مدل ابتدایی نوشت
+\begin{equation}
+L(X,Y,Z,\lambda,t)=E(X,Y,Z,\lambda,t)\,\rho(X,Y,Z,\lambda),
+\end{equation}
+که در آن \(E\) روشنایی تابیده‌شده و \(\rho\) بازتابندگی سطح است. حتی در این مدل ساده نیز
+یک پیکسل صرفاً «رنگ شیء» نیست؛ حاصل ضرب نور و ویژگی سطح است.
+
+\begin{warningbox}
+برابردانستن مقدار پیکسل با یک ویژگی ذاتی جسم، منشأ بسیاری از شکست‌های الگوریتمی است.
+تغییر نور، نوردهی، پاسخ دوربین و پردازش خودکار می‌تواند مقدار پیکسل را بدون تغییر جسم عوض کند.
+\end{warningbox}
+
+\subsection{تابع تصویر تک‌رنگ}
+
+پس از فرافکنی هندسی و اثر اپتیک، یک تصویر ایده‌آل تک‌رنگ را می‌توان به‌صورت
+\begin{equation}
+f:\Omega\subset\R^2\longrightarrow \R_{\ge 0},
+\qquad (x,y)\longmapsto f(x,y)
+\end{equation}
+تعریف کرد. دامنه \(\Omega\) ناحیه حسگر یا صفحه تصویر و \(f(x,y)\) انرژی یا شدت نوری مؤثر است.
+
+اما این تابع غالباً یک میانگین طیفی است. اگر \(s(\lambda)\) حساسیت طیفی حسگر باشد،
+\begin{equation}
+f(x,y)=\int_{\Lambda} L_{\mathrm{image}}(x,y,\lambda)\,s(\lambda)\,d\lambda.
+\label{eq:spectral-integration}
+\end{equation}
+در دوربین رنگی سه پاسخ متفاوت به‌کار می‌رود:
+\begin{equation}
+f_c(x,y)=\int_{\Lambda}L_{\mathrm{image}}(x,y,\lambda)s_c(\lambda)d\lambda,
+\qquad c\in\{R,G,B\}.
+\end{equation}
+پس تصویر رنگی تابعی برداری است:
+\begin{equation}
+f:\Omega\to\R^3.
+\end{equation}
+
+\subsection{تصویر، ویدئو و داده چندوجهی}
+
+با افزودن زمان، ویدئو به‌صورت
+\begin{equation}
+f:\Omega\times[0,T]\to\R^C
+\end{equation}
+تعریف می‌شود. داده حجمی پزشکی ممکن است
+\begin{equation}
+f:\Omega_x\times\Omega_y\times\Omega_z\to\R
+\end{equation}
+باشد و تصویر فراطیفی به شکل
+\begin{equation}
+f:\Omega_x\times\Omega_y\times\Lambda\to\R
+\end{equation}
+مدل شود. در نتیجه «تصویر» در این کتاب نامی برای یک آرایه دوبعدی ثابت نیست؛
+نمایشی نمونه‌برداری‌شده از یک میدان یا شیء پُربعد است.
+
+\section{زنجیره تشکیل تصویر}
+
+\subsection{مدل لایه‌ای}
+
+شکل \ref{fig:image-formation-chain} زنجیره‌ای را نشان می‌دهد که از صحنه آغاز و به داده دیجیتال ختم می‌شود.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+box/.style={draw=DeepBlue,thick,rounded corners,fill=SoftBlue,minimum height=12mm,
+             text width=25mm,align=center},
+arr/.style={-{Latex[length=2.5mm]},thick,DeepBlue},
+lab/.style={font=\small,align=center,text width=24mm}]
+\node[box] (scene) {صحنه و تابش\\\(x\)};
+\node[box,right=7mm of scene] (geom) {هندسه و حرکت\\\(\op P\)};
+\node[box,right=7mm of geom] (optics) {اپتیک و تاری\\\(\op H\)};
+\node[box,right=7mm of optics] (sensor) {انتگرال‌گیری حسگر\\\(\op S\)};
+\node[box,right=7mm of sensor] (adc) {نویز و تبدیل دیجیتال\\\(\op Q\)};
+\node[box,right=7mm of adc,fill=SoftGold] (data) {داده ذخیره‌شده\\\(y\)};
+\draw[arr] (scene)--(geom);
+\draw[arr] (geom)--(optics);
+\draw[arr] (optics)--(sensor);
+\draw[arr] (sensor)--(adc);
+\draw[arr] (adc)--(data);
+\node[below=7mm of sensor,draw=Accent,dashed,rounded corners,text width=9.5cm,align=center]
+{مدل پیشرو: \(y=\op Q\!\left(\op S\!\left(\op H\!\left(\op P(x)\right)\right)+\eta\right)\)};
+\end{tikzpicture}
+\caption{زنجیره مفهومی تشکیل تصویر. هر بلوک می‌تواند خطی، غیرخطی، قطعی یا تصادفی باشد.}
+\label{fig:image-formation-chain}
+\end{figure}
+
+در ساده‌ترین حالت تک‌رنگ، بدون اعوجاج هندسی و با اپتیک خطی ناوردا نسبت به انتقال،
+تصویر پیوسته روی حسگر برابر است با
+\begin{equation}
+g(x,y)=(h*f)(x,y)+\eta(x,y),
+\label{eq:continuous-blur}
+\end{equation}
+که در آن \(h\) تابع پخش نقطه‌ای یا \lr{PSF} و \(*\) کانولوشن دوبعدی است:
+\begin{equation}
+(h*f)(x,y)=\int_{\R^2}h(\xi,\zeta)f(x-\xi,y-\zeta)d\xi d\zeta.
+\end{equation}
+
+\subsection{تابع پخش نقطه‌ای}
+
+اگر ورودی اپتیکی یک نقطه ایده‌آل در مبدأ باشد، خروجی سامانه \(h(x,y)\) است.
+برای یک سامانه خطی، هر تصویر را می‌توان جمع پیوسته‌ای از نقاط دانست؛ در نتیجه پاسخ کل
+جمع پاسخ به این نقاط خواهد بود و کانولوشن ظاهر می‌شود.
+
+\begin{definition}[سامانه خطی]
+عملگر \(\op H\) خطی است هرگاه برای هر \(f_1,f_2\) و ضرایب \(a,b\) داشته باشیم
+\begin{equation}
+\op H(af_1+bf_2)=a\op H(f_1)+b\op H(f_2).
+\end{equation}
+\end{definition}
+
+\begin{definition}[ناوردایی نسبت به انتقال]
+اگر \(T_{\Delta}f(x,y)=f(x-\Delta_x,y-\Delta_y)\)، عملگر \(\op H\) نسبت به انتقال ناورداست هرگاه
+\begin{equation}
+\op H(T_{\Delta}f)=T_{\Delta}\op H(f).
+\end{equation}
+\end{definition}
+
+\begin{theorem}[نمایش کانولوشنی]
+هر سامانه پیوسته خطی و ناوردا نسبت به انتقال، تحت شرایط منظم‌بودن مناسب، با کانولوشن ورودی و پاسخ ضربه نمایش داده می‌شود:
+\begin{equation}
+\op H(f)=h*f,
+\qquad h=\op H(\delta).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+با نمایش تابع به‌صورت برهم‌نهی ضربه‌های انتقال‌یافته
+\begin{equation}
+f(x,y)=\int_{\R^2}f(\xi,\zeta)\delta(x-\xi,y-\zeta)d\xi d\zeta
+\end{equation}
+و استفاده از خطی‌بودن، عملگر را به داخل انتگرال می‌بریم. ناوردایی نسبت به انتقال می‌دهد
+\begin{equation}
+\op H\{\delta(x-\xi,y-\zeta)\}=h(x-\xi,y-\zeta).
+\end{equation}
+پس
+\begin{equation}
+\op H(f)=\int f(\xi,\zeta)h(x-\xi,y-\zeta)d\xi d\zeta=h*f.
+\end{equation}
+\end{proof}
+
+\subsection{انتگرال‌گیری روی سطح پیکسل}
+
+پیکسل یک نقطه ریاضی نیست. پیکسل واقعی در یک ناحیه \(P_{mn}\) و بازه نوردهی
+\([t_0,t_0+T_e]\) فوتون جمع می‌کند. مقدار ایده‌آل پیش از نویز می‌تواند به‌صورت
+\begin{equation}
+\mu_{mn}=\int_{t_0}^{t_0+T_e}\int_{P_{mn}}g(x,y,t)\,a_{mn}(x,y)\,dxdy\,dt
+\label{eq:pixel-integration}
+\end{equation}
+نوشته شود که \(a_{mn}\) پاسخ مکانی پیکسل است.
+این رابطه روشن می‌کند چرا حرکت در زمان نوردهی تاری می‌سازد و چرا کوچک‌کردن پیکسل
+به‌تنهایی همیشه کیفیت را افزایش نمی‌دهد: فوتون کمتر، نسبت سیگنال به نویز ضعیف‌تر و حساسیت بیشتر به پراش ممکن است رخ دهد.
+
+\subsection{نویز فوتونی و خوانش}
+
+در مدل فوتونی، تعداد فوتون‌های ثبت‌شده اغلب با متغیر پواسون تقریب زده می‌شود:
+\begin{equation}
+Z_{mn}\sim\operatorname{Poisson}(\mu_{mn}).
+\end{equation}
+خوانش الکترونیکی نیز ممکن است نویز گاوسی بیفزاید:
+\begin{equation}
+R_{mn}\sim\mathcal N(0,\sigma_r^2),
+\qquad Y_{mn}^{\mathrm{analog}}=g_s Z_{mn}+R_{mn}+b,
+\end{equation}
+که \(g_s\) بهره حسگر و \(b\) بایاس است. پس نویز همیشه جمعی، گاوسی و مستقل از سیگنال نیست.
+
+\section{از تابع پیوسته تا تصویر دیجیتال}
+
+\subsection{نمونه‌برداری مکانی}
+
+اگر شبکه نمونه‌برداری با فواصل \(\Delta_x,\Delta_y\) باشد، نمونه‌ها به شکل
+\begin{equation}
+g[m,n]=g(m\Delta_x,n\Delta_y),
+\qquad m=0,\dots,M-1,\quad n=0,\dots,N-1
+\end{equation}
+تعریف می‌شوند. مدل دقیق‌تر، طبق رابطه \eqref{eq:pixel-integration}، میانگین یا انتگرال روی سطح پیکسل است.
+
+تابع نمونه‌برداری شانه‌ای دوبعدی را تعریف می‌کنیم:
+\begin{equation}
+\operatorname{III}_{\Delta_x,\Delta_y}(x,y)
+=\sum_{m\in\mathbb Z}\sum_{n\in\mathbb Z}
+\delta(x-m\Delta_x)\delta(y-n\Delta_y).
+\end{equation}
+نمونه‌برداری ایده‌آل برابر است با
+\begin{equation}
+g_s(x,y)=g(x,y)\operatorname{III}_{\Delta_x,\Delta_y}(x,y).
+\end{equation}
+در فصل دوم نشان خواهیم داد که ضرب در حوزه مکان، به تکرار طیف در حوزه فرکانس منجر می‌شود
+و هم‌پوشانی این نسخه‌ها علیاسینگ را ایجاد می‌کند.
+
+\subsection{کوانتیزه‌سازی}
+
+پس از نمونه‌برداری، دامنه پیوسته یا پُردقت به مجموعه‌ای محدود از سطوح نگاشت می‌شود.
+برای کوانتیزه‌ساز یکنواخت \(B\)-بیتی با بازه \([a,b]\)، اندازه گام تقریباً
+\begin{equation}
+\Delta_q=\frac{b-a}{2^B-1}
+\end{equation}
+است و
+\begin{equation}
+Y[m,n]=Q_B(g[m,n]+\eta[m,n]).
+\end{equation}
+اگر اشباع رخ ندهد و خطای کوانتیزه‌سازی به‌طور تقریبی یکنواخت باشد،
+\begin{equation}
+e_q\sim\mathcal U\left(-\frac{\Delta_q}{2},\frac{\Delta_q}{2}\right),
+\qquad \operatorname{Var}(e_q)=\frac{\Delta_q^2}{12}.
+\end{equation}
+این تقریب در نزدیکی سطوح ثابت، بیت کم یا پردازش غیرخطی ممکن است معتبر نباشد.
+
+\section{چهار نمایش ریاضی یک تصویر دیجیتال}
+
+فرض کنید تصویر خاکستری \(M\times N\) باشد.
+
+\subsection{تصویر به‌صورت تابع روی شبکه}
+\begin{equation}
+f:\{0,\dots,M-1\}\times\{0,\dots,N-1\}\to\R.
+\end{equation}
+این نمایش برای نوشتن فیلترهای محلی و هندسه پیکسل مناسب است.
+
+\subsection{تصویر به‌صورت ماتریس}
+\begin{equation}
+\vect F=
+\begin{bmatrix}
+f[0,0]&\cdots&f[0,N-1]\\
+\vdots&\ddots&\vdots\\
+f[M-1,0]&\cdots&f[M-1,N-1]
+\end{bmatrix}\in\R^{M\times N}.
+\end{equation}
+در این نمایش، رتبه، مقادیر منفرد، نرم هسته‌ای و ساختار بلوکی قابل مطالعه‌اند.
+
+\subsection{تصویر به‌صورت بردار}
+
+با عملگر \(\operatorname{vec}\)، ستون‌ها یا سطرهای تصویر پشت سر هم قرار می‌گیرند:
+\begin{equation}
+\vect f=\operatorname{vec}(\vect F)\in\R^{MN}.
+\end{equation}
+این نمایش برای نوشتن عملگرهای خطی به‌صورت ماتریس سودمند است:
+\begin{equation}
+\vect y=\vect A\vect f+\vect\eta.
+\end{equation}
+اما ماتریس \(\vect A\) غالباً نباید به‌طور صریح ساخته شود؛ برای تصویر مگاپیکسلی، ابعاد آن می‌تواند نجومی باشد.
+
+\subsection{تصویر به‌صورت تانسور}
+
+یک دسته \(B\)-تایی از تصاویر رنگی با ابعاد \(H\times W\) در یادگیری عمیق معمولاً به شکل
+\begin{equation}
+\vect X\in\R^{B\times C\times H\times W}
+\end{equation}
+ذخیره می‌شود. ترتیب محورها یک قرارداد نرم‌افزاری است، نه حقیقت فیزیکی.
+برای ویدئو، محور زمان افزوده می‌شود و برای داده فراطیفی، محور طیف معنای فیزیکی دارد.
+
+\begin{warningbox}
+سه خطای بسیار رایج در کدهای دانشجویی عبارت‌اند از: جابه‌جایی ارتفاع و عرض، جابه‌جایی کانال و دسته،
+و استفاده ناخواسته از نوع داده صحیح هنگام انجام محاسبات اعشاری. هر سه می‌توانند خروجی ظاهراً قابل قبول اما علمی نادرست بسازند.
+\end{warningbox}
+
+\section{تصویر در فضاهای برداری و تابعی}
+
+\subsection{ضرب داخلی و انرژی}
+
+در فضای گسسته \(\R^{M\times N}\)، ضرب داخلی فرابنیوس برابر است با
+\begin{equation}
+\inner{\vect F}{\vect G}_F
+=\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}F_{mn}G_{mn}
+=\operatorname{trace}(\vect F\trans\vect G).
+\end{equation}
+نرم متناظر
+\begin{equation}
+\norm{\vect F}_F=\sqrt{\inner{\vect F}{\vect F}_F}
+\end{equation}
+انرژی اقلیدسی تصویر را اندازه می‌گیرد.
+
+در حالت پیوسته، فضای \(L^2(\Omega)\) شامل توابعی است که
+\begin{equation}
+\norm{f}_{L^2}^2=\int_\Omega\abs{f(x,y)}^2dxdy<\infty.
+\end{equation}
+
+\subsection{نرم‌های \(\ell_p\)}
+
+برای بردار \(\vect f\in\R^d\):
+\begin{equation}
+\norm{\vect f}_p=\left(\sum_{i=1}^d\abs{f_i}^p\right)^{1/p},\qquad p\ge1,
+\end{equation}
+و
+\begin{equation}
+\norm{\vect f}_\infty=\max_i\abs{f_i}.
+\end{equation}
+\(\ell_2\) انرژی خطا را برجسته می‌کند، \(\ell_1\) نسبت به خطاهای بزرگ مقاوم‌تر است و
+همچنین می‌تواند تنکی را تشویق کند، و \(\ell_\infty\) بدترین خطا را کنترل می‌کند.
+
+\begin{example}[دو خطا با انرژی برابر]
+دو بردار خطا را در نظر بگیرید:
+\begin{equation}
+\vect e_1=(1,1,1,1),\qquad \vect e_2=(2,0,0,0).
+\end{equation}
+هر دو نرم \(\ell_2\) برابر ۲ دارند، اما
+\begin{equation}
+\norm{\vect e_1}_1=4,\qquad \norm{\vect e_2}_1=2,
+\end{equation}
+و
+\begin{equation}
+\norm{\vect e_1}_\infty=1,\qquad \norm{\vect e_2}_\infty=2.
+\end{equation}
+پس واژه «خطا» بدون مشخص‌کردن معیار ناقص است.
+\end{example}
+
+\subsection{فضاهای هموار و تغییرات کلی}
+
+تصاویر طبیعی در لبه‌ها ناپیوستگی دارند، بنابراین فرض همواری مربعی سراسری همیشه مناسب نیست.
+نیم‌نرم مرتبه اول را می‌توان به شکل
+\begin{equation}
+\norm{f}_{H^1}^2=\norm{f}_{L^2}^2+\norm{\nabla f}_{L^2}^2
+\end{equation}
+نوشت. این معیار گرادیان‌های بزرگ را به‌صورت مربعی جریمه می‌کند و ممکن است لبه‌ها را بیش از حد صاف کند.
+
+تغییرات کلی همسانگرد در حالت پیوسته برابر است با
+\begin{equation}
+\operatorname{TV}(f)=\int_\Omega\norm{\nabla f(x,y)}_2dxdy.
+\end{equation}
+نسخه گسسته رایج:
+\begin{equation}
+\operatorname{TV}(\vect F)=\sum_{m,n}
+\sqrt{(D_x\vect F)_{mn}^2+(D_y\vect F)_{mn}^2+\varepsilon^2}.
+\end{equation}
+جریمه خطی اندازه گرادیان نسبت به جریمه مربعی، لبه‌های بزرگ را کمتر سرکوب می‌کند.
+
+\section{عملگرها: واحد سازنده پردازش تصویر}
+
+\subsection{عملگر خطی و الحاقی}
+
+برای فضاهای ضرب داخلی \(\mathcal X,\mathcal Y\)، عملگر خطی
+\(\op A:\mathcal X\to\mathcal Y\) دارای عملگر الحاقی \(\op A^*\) است اگر
+\begin{equation}
+\inner{\op A x}{y}_{\mathcal Y}=\inner{x}{\op A^*y}_{\mathcal X}
+\end{equation}
+برای همه \(x,y\) برقرار باشد. در حالت ماتریسی حقیقی، الحاقی همان ترانهاده است.
+
+عملگر الحاقی در گرادیان تابع داده نقش بنیادی دارد. اگر
+\begin{equation}
+\mathcal D(x)=\frac12\norm{\op A x-y}_2^2,
+\end{equation}
+آنگاه
+\begin{equation}
+\nabla\mathcal D(x)=\op A^*(\op A x-y).
+\label{eq:data-gradient}
+\end{equation}
+این رابطه در کمترین مربعات، بازفرافکنی توموگرافی، شبکه‌های بازشده و بسیاری از روش‌های مدرن تکرار می‌شود.
+
+\subsection{چند عملگر مهم}
+
+\begin{longtable}{p{0.2\textwidth}p{0.34\textwidth}p{0.36\textwidth}}
+\toprule
+\textbf{عملگر} & \textbf{مدل} & \textbf{نمونه کاربرد}\\
+\midrule
+\endhead
+همانی & \(\op A(x)=x\) & حذف نویز؛ مجهول مستقیماً با نویز مشاهده می‌شود.\\
+تاری & \(\op A(x)=h*x\) & تاری خارج از فوکوس، حرکت یا پراش.\\
+زیرنمونه‌برداری & \(\op A(x)=\op D x\) & ابرتفکیک و داده کم‌وضوح.\\
+پوشاندن & \(\op A(x)=\vect M\odot x\) & پرکردن نواحی گمشده و پیکسل‌های خراب.\\
+فوریه جزئی & \(\op A(x)=\vect P\vect F x\) & بازسازی \lr{MRI}.\\
+رادون & \(\op A(x)=\mathcal R x\) & توموگرافی و \lr{CT}.\\
+قدر مطلق فوریه & \(\op A(x)=\abs{\vect F x}^2\) & بازیابی فاز؛ عملگر غیرخطی.\\
+شبکه دوربین & \(\op A(x;\theta)\) & مدل پاسخ دوربین، دموُزاییک و پردازش داخلی.\\
+\bottomrule
+\end{longtable}
+
+\subsection{عملگرهای غیرخطی}
+
+گاما، اشباع، آستانه‌گذاری، میانه، قدر مطلق، کوانتیزه‌سازی و شبکه عصبی نمونه‌هایی از عملگر غیرخطی‌اند.
+برای مثال تبدیل گاما
+\begin{equation}
+y=x^{1/\gamma}
+\end{equation}
+جمع‌پذیر نیست. فیلتر میانه نیز به ترتیب آماری همسایگی وابسته است و نمی‌توان آن را با یک هسته ثابت کانولوشن نمایش داد.
+
+\section{مدل عمومی پیشرو}
+
+مدل بنیادی این کتاب چنین است:
+\begin{equation}
+\vect y=\op A(\vect x;\vect\theta)+\vect\eta,
+\label{eq:general-forward}
+\end{equation}
+که در آن:
+\begin{itemize}
+\item \(\vect x\) کمیت مطلوب، مانند تصویر پاک، تصویر پُروضوح، حجم یا پارامتر صحنه است؛
+\item \(\vect y\) داده اندازه‌گیری‌شده است؛
+\item \(\op A\) مدل پیشرو فیزیکی یا محاسباتی است؛
+\item \(\vect\theta\) پارامترهای کالیبراسیون یا مجهول عملگر است؛
+\item \(\vect\eta\) نویز، خطای مدل و اغتشاش‌های ثبت‌نشده را دربرمی‌گیرد.
+\end{itemize}
+
+گاهی خود \(\op A\) نیز نامعلوم است. در تاری کور، هم تصویر \(x\) و هم هسته \(h\) باید تخمین زده شوند:
+\begin{equation}
+y=h*x+\eta.
+\end{equation}
+این مسئله بسیار دشوارتر از دکانولوشن با هسته معلوم است، زیرا زوج‌های متعدد \((x,h)\) می‌توانند خروجی مشابه بسازند.
+
+\begin{keybox}[اصل سازگاری داده]
+هر خروجی بازسازی‌شده \(\widehat x\) باید پس از عبور از مدل پیشرو، اندازه‌گیری واقعی را توضیح دهد:
+\begin{equation}
+\op A(\widehat x)\approx y.
+\end{equation}
+کیفیت ظاهری به‌تنهایی کافی نیست. تصویری زیبا که با داده فیزیکی سازگار نیست، ممکن است «توهم بازسازی» باشد.
+\end{keybox}
+
+\section{مسئله معکوس و مفهوم بدوضعی}
+
+\subsection{شرایط هادامار}
+
+\begin{definition}[مسئله خوش‌وضع]
+یک مسئله به معنای هادامار خوش‌وضع است اگر:
+\begin{enumerate}
+\item پاسخ وجود داشته باشد؛
+\item پاسخ یکتا باشد؛
+\item پاسخ به داده وابستگی پیوسته داشته باشد.
+\end{enumerate}
+اگر هر کدام نقض شود، مسئله بدوضع است.
+\end{definition}
+
+در پردازش تصویر، شرط سوم بسیار مهم است. ممکن است وارون ریاضی وجود داشته باشد، اما نویز بسیار کوچک در داده به خطای بسیار بزرگ در پاسخ تبدیل شود.
+
+\subsection{تحلیل مقادیر منفرد}
+
+برای مدل خطی گسسته
+\begin{equation}
+\vect y=\vect A\vect x+\vect\eta,
+\end{equation}
+تجزیه مقدار منفرد را بنویسید:
+\begin{equation}
+\vect A=\vect U\vect\Sigma\vect V\trans,
+\qquad
+\vect\Sigma=\operatorname{diag}(\sigma_1,\ldots,\sigma_r),
+\end{equation}
+که \(\sigma_1\ge\cdots\ge\sigma_r>0\) هستند. وارون شبه‌مور برای داده بدون نویز
+\begin{equation}
+\widehat{\vect x}_{\mathrm{pinv}}
+=\vect A^\dagger\vect y
+=\sum_{i=1}^{r}\frac{\vect u_i\trans\vect y}{\sigma_i}\vect v_i
+\end{equation}
+است. با جای‌گذاری \(\vect y=\vect A\vect x+\vect\eta\):
+\begin{equation}
+\widehat{\vect x}_{\mathrm{pinv}}
+=\vect V\vect V\trans\vect x
++\sum_{i=1}^{r}\frac{\vect u_i\trans\vect\eta}{\sigma_i}\vect v_i.
+\end{equation}
+اگر \(\sigma_i\) کوچک باشد، مؤلفه نویز بر \(\sigma_i\) تقسیم و بزرگ می‌شود.
+
+\begin{proposition}[کران حساسیت]
+اگر \(\vect A\) وارون‌پذیر باشد، تغییر پاسخ نسبت به اغتشاش داده از رابطه
+\begin{equation}
+\norm{\delta\vect x}_2
+\le \norm{\vect A^{-1}}_2\norm{\delta\vect y}_2
+=\frac{1}{\sigma_{\min}(\vect A)}\norm{\delta\vect y}_2
+\end{equation}
+پیروی می‌کند.
+\end{proposition}
+
+عدد وضعیت
+\begin{equation}
+\kappa_2(\vect A)=\frac{\sigma_{\max}(\vect A)}{\sigma_{\min}(\vect A)}
+\end{equation}
+مقیاس تقویت نسبی خطا را بیان می‌کند. در دکانولوشن، فرکانس‌هایی که پاسخ انتقال اپتیک در آن‌ها کوچک است، همان جهت‌های کم‌مقدار منفردند.
+
+\subsection{عدم یکتایی و هسته}
+
+اگر بردار ناصفر \(\vect z\in\ker(\vect A)\) باشد، آنگاه
+\begin{equation}
+\vect A(\vect x+\vect z)=\vect A\vect x.
+\end{equation}
+پس اندازه‌گیری نمی‌تواند میان \(\vect x\) و \(\vect x+\vect z\) تمایز بگذارد.
+هیچ الگوریتمی نمی‌تواند اطلاعاتی را که عملگر به‌طور کامل حذف کرده است، تنها از داده بازیابی کند؛
+باید قید یا دانش پیشین افزوده شود.
+
+\section{از برازش داده تا منظم‌سازی}
+
+\subsection{کمترین مربعات}
+
+برای نویز گاوسی سفید، یک تخمین طبیعی عبارت است از
+\begin{equation}
+\widehat{\vect x}_{\mathrm{LS}}
+\in\arg\min_{\vect x}\frac12\norm{\vect A\vect x-\vect y}_2^2.
+\end{equation}
+شرط مرتبه اول:
+\begin{equation}
+\vect A\trans(\vect A\widehat{\vect x}-\vect y)=0.
+\end{equation}
+اگر \(\vect A\trans\vect A\) وارون‌پذیر باشد،
+\begin{equation}
+\widehat{\vect x}=(\vect A\trans\vect A)^{-1}\vect A\trans\vect y.
+\end{equation}
+اما تشکیل معادلات نرمال عدد وضعیت را تقریباً مربع می‌کند و برای مسائل بزرگ مناسب نیست.
+
+\subsection{منظم‌سازی تیکانوف}
+
+برای کنترل ناپایداری، مسئله را به شکل
+\begin{equation}
+\widehat{\vect x}_\lambda
+=\arg\min_{\vect x}
+\left\{
+\frac12\norm{\vect A\vect x-\vect y}_2^2
++\frac{\lambda}{2}\norm{\vect L\vect x}_2^2
+\right\}
+\label{eq:tikhonov}
+\end{equation}
+می‌نویسیم. پاسخ، در صورت وارون‌پذیری، برابر است با
+\begin{equation}
+\widehat{\vect x}_\lambda
+=(\vect A\trans\vect A+\lambda\vect L\trans\vect L)^{-1}\vect A\trans\vect y.
+\end{equation}
+
+برای \(\vect L=\vect I\)، فیلتر روی مؤلفه‌های منفرد چنین است:
+\begin{equation}
+\widehat{\vect x}_\lambda
+=\sum_i
+\underbrace{\frac{\sigma_i}{\sigma_i^2+\lambda}}_{\text{عامل بازسازی}}
+(\vect u_i\trans\vect y)\vect v_i.
+\end{equation}
+در وارون مستقیم عامل \(1/\sigma_i\) بود، اما اکنون برای \(\sigma_i\ll\sqrt\lambda\)،
+تقویت محدود می‌شود. بهای این پایداری، بایاس است.
+
+\subsection{منظم‌سازی تغییرات کلی}
+
+برای حفظ لبه‌ها می‌توان نوشت
+\begin{equation}
+\widehat{\vect x}
+=\arg\min_{\vect x}
+\frac12\norm{\vect A\vect x-\vect y}_2^2
++\lambda\operatorname{TV}(\vect x).
+\label{eq:tv}
+\end{equation}
+این مسئله معمولاً پاسخ بسته ندارد و با روش‌های پروگزیمال، \lr{ADMM} یا الگوریتم‌های اولیه ـ دوگان حل می‌شود.
+
+\subsection{صورت احتمالاتی و تخمین MAP}
+
+اگر درست‌نمایی داده \(p(\vect y\mid\vect x)\) و پیشین \(p(\vect x)\) معلوم باشد،
+قاعده بیز می‌دهد
+\begin{equation}
+p(\vect x\mid\vect y)
+\propto p(\vect y\mid\vect x)p(\vect x).
+\end{equation}
+تخمین بیشینه پسین:
+\begin{align}
+\widehat{\vect x}_{\mathrm{MAP}}
+&=\arg\max_{\vect x}p(\vect x\mid\vect y)\\
+&=\arg\min_{\vect x}
+\left[-\log p(\vect y\mid\vect x)-\log p(\vect x)\right].
+\end{align}
+اگر نویز گاوسی باشد، جمله نخست به کمترین مربعات تبدیل می‌شود. اگر پیشین
+\begin{equation}
+p(\vect x)\propto\exp(-\lambda\mathcal R(\vect x))
+\end{equation}
+باشد، منفی لگاریتم پیشین همان منظم‌ساز است. پس منظم‌سازی و استنباط بیزی دو زبان مرتبط‌اند.
+
+\section{پیشین‌های دست‌ساز، آموخته‌شده و مولد}
+
+\subsection{پیشین دست‌ساز}
+
+نمونه‌ها عبارت‌اند از همواری، تنکی گرادیان، تنکی موجک، خودشباهتی غیرمحلی، رتبه کم و محدودیت بازه شدت.
+مزیت آن‌ها تفسیرپذیری و امکان تحلیل ریاضی است؛ ضعف آن‌ها محدودیت در مدل‌کردن ساختار پیچیده تصویر است.
+
+\subsection{پیشین ضمنی در حذف‌کننده نویز}
+
+چارچوب \lr{Plug-and-Play} یک حل‌کننده سازگاری داده را با یک حذف‌کننده نویز ترکیب می‌کند،
+حتی اگر حذف‌کننده صریحاً گرادیان یک منظم‌ساز شناخته‌شده نباشد \cite{venkatakrishnan2013pnp}.
+به‌صورت شماتیک:
+\begin{align}
+\vect z^{k+1}&\approx\arg\min_z\mathcal D(z;y)+\frac{\rho}{2}\norm{z-\vect v^k}_2^2,\\
+\vect x^{k+1}&=D_\sigma(\vect z^{k+1}),
+\end{align}
+که \(D_\sigma\) حذف‌کننده نویز است.
+
+\subsection{پیشین مولد و مدل امتیاز}
+
+مدل مولد می‌کوشد توزیع تصاویر را بیاموزد. در مدل‌های امتیاز، کمیت
+\begin{equation}
+s_\theta(\vect x,t)\approx\nabla_{\vect x}\log p_t(\vect x)
+\end{equation}
+یاد گرفته می‌شود. مدل‌های دیفیوژن با افزودن تدریجی نویز و یادگیری فرایند معکوس،
+حذف نویز را به سازوکار تولید تبدیل می‌کنند \cite{ho2020ddpm}.
+در بازسازی، چنین مدلی می‌تواند یک پیشین بسیار قوی باشد؛ اما اگر سازگاری داده ضعیف شود،
+جزئیات محتمل ولی نادرست تولید می‌شوند.
+
+\begin{futurebox}
+در دهه آینده، مرز میان «فیلتر»، «منظم‌ساز»، «حذف‌کننده نویز» و «مدل مولد» کم‌رنگ‌تر می‌شود.
+با این حال، معادله \eqref{eq:general-forward} همچنان معیار اتصال مدل آموخته‌شده به واقعیت فیزیکی خواهد بود.
+مدل قوی‌تر، نیاز به مدل پیشرو و سنجش عدم‌قطعیت را از بین نمی‌برد؛ اهمیت آن‌ها را بیشتر می‌کند.
+\end{futurebox}
+
+\section{از پیکسل تا توکن و نمایش}
+
+ترنسفورمر بینایی تصویر \(H\times W\times C\) را به وصله‌های \(P\times P\) تقسیم می‌کند.
+تعداد توکن‌ها
+\begin{equation}
+N=\frac{HW}{P^2}
+\end{equation}
+است. هر وصله برداری و با نگاشت خطی به یک بردار \(d\)-بعدی تبدیل می‌شود:
+\begin{equation}
+\vect z_i=\vect E\operatorname{vec}(\vect X_i)+\vect p_i,
+\end{equation}
+که \(\vect p_i\) کد موقعیت است. توجه خودی برای ماتریس توکن‌ها \(\vect Z\) به شکل
+\begin{equation}
+\operatorname{Attention}(\vect Q,\vect K,\vect V)
+=\operatorname{softmax}\left(\frac{\vect Q\vect K\trans}{\sqrt{d_k}}\right)\vect V
+\end{equation}
+تعریف می‌شود.
+
+این نمایش جایگزین حقیقت فیزیکی تصویر نیست. توکن‌سازی خود نوعی نمونه‌برداری و فشرده‌سازی است.
+اندازه وصله، کد موقعیت و معماری توجه تعیین می‌کنند چه جزئیاتی حفظ یا حذف شود.
+مدل‌های خودنظارتی مانند \lr{MAE} بخشی از وصله‌ها را پنهان و بازسازی می‌کنند و مدل‌هایی مانند
+\lr{DINOv2} نمایش‌های عمومی را بدون برچسب مستقیم می‌آموزند \cite{he2022mae,oquab2024dinov2}.
+
+\section{سه سطح مسئله: پردازش، تحلیل و فهم}
+
+\begin{enumerate}
+\item \textbf{پردازش سطح پایین:} ورودی و خروجی تصویرند؛ مانند حذف نویز، رفع تاری، ابرتفکیک و اصلاح رنگ.
+\item \textbf{تحلیل سطح میانی:} خروجی ساختار است؛ مانند لبه، ناحیه، عمق، حرکت، تطبیق یا ماسک.
+\item \textbf{فهم سطح بالا:} خروجی مفهوم، تصمیم یا پاسخ زبانی است؛ مانند تشخیص، شرح تصویر و استدلال دیداری.
+\end{enumerate}
+
+مدل‌های بنیادی این مرزها را مخلوط کرده‌اند. یک نمایش واحد ممکن است برای دسته‌بندی، عمق و قطعه‌بندی استفاده شود؛
+یک مدل قابل‌پرامپت می‌تواند بدون آموزش اختصاصی ماسک تولید کند؛ و مدل‌های مولد می‌توانند هم تصویر بسازند و هم
+به‌عنوان پیشین بازسازی به کار روند. با وجود این، معیار موفقیت در هر سطح متفاوت است و نباید کیفیت ادراکی،
+دقت پارامتری و صحت معنایی با یکدیگر خلط شوند.
+
+\section{مثال یکپارچه: رفع تاری حرکت}
+
+فرض کنید تصویر پاک \(\vect x\) با هسته حرکت \(\vect h\) تار و سپس با نویز آلوده شود:
+\begin{equation}
+\vect y=\vect H\vect x+\vect\eta.
+\end{equation}
+
+\subsection{راه‌حل خام}
+در حوزه فوریه، اگر \(Y=HX+N\)، وارون مستقیم
+\begin{equation}
+\widehat X=\frac{Y}{H}
+\end{equation}
+است. اگر \(H(\omega)\) در برخی فرکانس‌ها نزدیک صفر باشد، نویز شدیداً تقویت می‌شود.
+
+\subsection{تیکانوف در حوزه فرکانس}
+برای \(\vect L=\vect I\):
+\begin{equation}
+\widehat X_\lambda(\omega)
+=\frac{\overline{H(\omega)}}{\abs{H(\omega)}^2+\lambda}Y(\omega).
+\end{equation}
+این فیلتر در فرکانس‌های مطمئن تقریباً وارون و در فرکانس‌های ضعیف سرکوب‌کننده است.
+
+\subsection{پیشین لبه}
+در روش \lr{TV}، انتظار داریم تصویر در نواحی صاف گرادیان کم و در مرزها تعداد محدودی گرادیان بزرگ داشته باشد.
+حل غیرخطی‌تر اما لبه‌حافظ‌تر است.
+
+\subsection{پیشین آموخته‌شده}
+یک شبکه بازسازی یا مدل دیفیوژن می‌تواند ساختارهای پیچیده‌تر را بازسازی کند؛ ولی باید بررسی شود آیا جزئیات
+بازسازی‌شده واقعاً توسط داده پشتیبانی می‌شوند یا از توزیع آموزشی «حدس» زده شده‌اند.
+
+\section{آزمایش محوری فصل}
+
+\begin{workshopbox}[از عملگر پیشرو تا بازسازی پایدار]
+\textbf{هدف:} دانشجو باید یک تصویر آزمایشی بسازد، آن را با سه عملگر تخریب کند و نشان دهد چرا وارون مستقیم شکست می‌خورد.
+
+\textbf{مراحل:}
+\begin{enumerate}
+\item یک تصویر خاکستری استاندارد و یک تصویر مصنوعی شامل ناحیه صاف، لبه تیز و بافت بسازید.
+\item سه \lr{PSF} تعریف کنید: گاوسی، حرکت خطی و تاری خارج از فوکوس.
+\item برای هر کدام نویز گاوسی و پواسون را جداگانه بیفزایید.
+\item پاسخ فرکانسی هسته و توزیع مقادیر منفرد عملگر را رسم کنید.
+\item وارون مستقیم، تیکانوف و \lr{TV} را اجرا کنید.
+\item پارامتر منظم‌سازی را تنها با نگاه‌کردن به تصویر انتخاب نکنید؛ منحنی خطای بازسازی، باقیمانده داده و حساسیت را گزارش کنید.
+\item آزمایش را با هسته اشتباه تکرار کنید تا اثر خطای مدل مشخص شود.
+\item برای هر خروجی، هم معیار پیکسلی و هم سازگاری داده \(\norm{\op A(\widehat x)-y}\) را ثبت کنید.
+\end{enumerate}
+\end{workshopbox}
+
+\subsection{اسکلت الگوریتم تیکانوف با گرادیان مزدوج}
+
+به‌جای ساخت ماتریس بزرگ، عملگر پیشرو و الحاقی را به‌صورت تابع پیاده‌سازی کنید.
+برای حل
+\begin{equation}
+(\op A^*\op A+\lambda\op L^*\op L)x=\op A^*y
+\end{equation}
+از گرادیان مزدوج استفاده کنید.
+
+\begin{LTR}
+\begin{lstlisting}[caption={Matrix-free Tikhonov solver skeleton}]
+import numpy as np
+from scipy.sparse.linalg import LinearOperator, cg
+
+
+def solve_tikhonov(y, A, AT, L, LT, shape, lam, rtol=1e-6):
+    """Solve (A^T A + lam L^T L)x = A^T y matrix-free."""
+    n = int(np.prod(shape))
+
+    def matvec(x_vec):
+        x = x_vec.reshape(shape)
+        out = AT(A(x)) + lam * LT(L(x))
+        return np.asarray(out, dtype=np.float64).ravel()
+
+    normal_op = LinearOperator((n, n), matvec=matvec, dtype=np.float64)
+    rhs = np.asarray(AT(y), dtype=np.float64).ravel()
+    x_vec, info = cg(normal_op, rhs, rtol=rtol)
+    if info != 0:
+        raise RuntimeError(f"CG did not converge; info={info}")
+    return x_vec.reshape(shape)
+\end{lstlisting}
+\end{LTR}
+
+\subsection{آزمون‌هایی که باید نوشته شوند}
+\begin{itemize}
+\item \textbf{آزمون الحاقی:}
+\begin{equation}
+\frac{\abs{\inner{\op A x}{y}-\inner{x}{\op A^*y}}}
+{\max(1,\abs{\inner{\op A x}{y}},\abs{\inner{x}{\op A^*y}})}<10^{-6}.
+\end{equation}
+\item \textbf{آزمون حد بدون تخریب:} اگر \(A=I\) و نویز صفر باشد، بازسازی باید ورودی را با خطای عددی بازگرداند.
+\item \textbf{آزمون یکنواختی:} کانولوشن هسته نرمال‌شده با تصویر ثابت باید تصویر ثابت را، دور از مرزها، حفظ کند.
+\item \textbf{آزمون بازتولیدپذیری:} بذر تصادفی، نسخه کتابخانه‌ها و پارامترها ذخیره شوند.
+\end{itemize}
+
+\begin{keybox}[پرامپت پیشنهادی برای دستیار کدنویسی]
+یک پروژه پایتون بازتولیدپذیر برای آزمایش فصل اول بساز. عملگرهای تاری گاوسی، حرکت و خارج از فوکوس را
+به‌صورت توابع \lr{forward} و \lr{adjoint} پیاده‌سازی کن و آزمون الحاقی بنویس. نویز گاوسی و پواسون را
+با بذر ثابت اضافه کن. وارون مستقیم فرکانسی، تیکانوف ماتریس‌آزاد با گرادیان مزدوج و \lr{TV} را پیاده‌سازی کن.
+برای هر حالت، \lr{MSE, PSNR, SSIM}، خطای سازگاری داده، زمان و حافظه را ذخیره کن. آزمایش خطای مدل را با
+استفاده از هسته بازسازی متفاوت از هسته تولید داده اجرا کن. تمام شکل‌ها و جدول‌ها باید از فایل نتایج تولید شوند؛
+هیچ عددی در گزارش به‌صورت دستی نوشته نشود. فایل‌های \lr{requirements.txt}، \lr{README.md} و آزمون‌های
+\lr{pytest} نیز ایجاد شوند.
+\end{keybox}
+
+\section{چگونه یک آزمایش را علمی گزارش کنیم؟}
+
+یک شکل زیبا به‌تنهایی آزمایش نیست. گزارش باید دست‌کم شامل موارد زیر باشد:
+\begin{enumerate}
+\item مدل دقیق تولید داده و واحد پارامترها؛
+\item داده واقعی یا مصنوعی و دلیل انتخاب آن؛
+\item محدوده پارامترها و روش انتخاب ابرپارامتر؛
+\item معیارهای کیفیت، پارامتری، سازگاری داده و هزینه محاسباتی؛
+\item میانگین و انحراف معیار روی چند تکرار در حضور تصادف؛
+\item تحلیل شکست، نه فقط بهترین حالت؛
+\item کد، بذر، محیط اجرا و مسیر تولید خودکار جدول‌ها.
+\end{enumerate}
+
+\begin{warningbox}
+انتخاب بهترین \(\lambda\) با استفاده از تصویر حقیقت و سپس گزارش همان خطا به‌عنوان نتیجه نهایی،
+اگر حقیقت در کاربرد واقعی در دسترس نیست، ارزیابی خوش‌بینانه است. برای داده مصنوعی باید نقش آن را
+«کران تشخیصی» دانست؛ برای کاربرد واقعی باید روش انتخاب مستقلی مانند اعتبارسنجی، اصل ناسازگاری،
+\lr{SURE} یا معیار مبتنی بر فیزیک طراحی شود.
+\end{warningbox}
+
+\section{تمرین‌های ریاضی}
+
+\subsection*{تمرین ۱: خطی‌بودن و ناوردایی}
+برای هر عملگر زیر تعیین کنید خطی و/یا ناوردا نسبت به انتقال است:
+\begin{enumerate}
+\item \(\op A(f)=f^2\)،
+\item \(\op A(f)=h*f\)،
+\item \(\op A(f)(x,y)=x f(x,y)\)،
+\item فیلتر میانه \(3\times3\)،
+\item \(\op A(f)=f-\operatorname{mean}(f)\).
+\end{enumerate}
+برای هر پاسخ اثبات یا مثال نقض ارائه کنید.
+
+\subsection*{تمرین ۲: الحاقی زیرنمونه‌برداری}
+فرض کنید \(D\) فقط پیکسل‌های زوج را نگه می‌دارد. عملگر الحاقی \(D^*\) را استخراج کنید و نشان دهید
+\(D^*\) در مکان‌های مشاهده‌نشده صفر درج می‌کند؛ سپس تفاوت آن را با درون‌یابی توضیح دهید.
+
+\subsection*{تمرین ۳: فیلتر تیکانوف}
+با استفاده از \lr{SVD} نشان دهید حل \eqref{eq:tikhonov} برای \(L=I\) دارای عامل فیلتر
+\begin{equation}
+\phi_i(\lambda)=\frac{\sigma_i^2}{\sigma_i^2+\lambda}
+\end{equation}
+در بازسازی مؤلفه واقعی است. حدهای \(\lambda\to0\) و \(\lambda\to\infty\) را تفسیر کنید.
+
+\subsection*{تمرین ۴: MAP با نویز پواسون}
+اگر \(y_i\sim\operatorname{Poisson}((Ax)_i)\)، منفی لگاریتم درست‌نمایی را تا ثابت‌های مستقل از \(x\)
+به‌دست آورید و نشان دهید چرا کمترین مربعات معمولی دقیقاً متناظر با این نویز نیست.
+
+\subsection*{تمرین ۵: ناپایداری}
+یک ماتریس قطری \(A=\operatorname{diag}(1,10^{-1},10^{-2},10^{-4})\) بسازید. برای یک بردار معلوم،
+نویز با اندازه \(10^{-4}\) اضافه کنید و وارون مستقیم را تحلیل کنید. جهت خطرناک نویز کدام است؟
+
+\subsection*{تمرین ۶: هسته عملگر}
+برای عملگر مشتق گسسته مرتبه اول، هسته را تعیین کنید. توضیح دهید چرا بازسازی یک سیگنال از مشتق آن
+تا یک ثابت نامعین است و چه قیدی یکتایی را بازمی‌گرداند.
+
+\section{تمرین‌های پژوهشی و مهندسی}
+
+\begin{enumerate}
+\item یک دوربین گوشی را در حالت \lr{RAW} و \lr{JPEG} روی صحنه ثابت آزمایش کنید. هیستوگرام، اشباع،
+شارپ‌سازی و تغییرات کانال رنگ را مقایسه کنید و توضیح دهید کدام بلوک‌های شکل \ref{fig:image-formation-chain}
+در خروجی \lr{JPEG} پنهان شده‌اند.
+\item برای یک تصویر پزشکی یا صنعتی، یک بازسازی «ظاهراً بهتر اما ناسازگار با داده» بسازید و نشان دهید
+چرا معیار ادراکی به‌تنهایی خطرناک است.
+\item اندازه حافظه لازم برای ساخت صریح ماتریس تاری یک تصویر \(1024\times1024\) را محاسبه کنید.
+سپس پیاده‌سازی ماتریس‌آزاد را با آن مقایسه کنید.
+\item یک حذف‌کننده نویز ازپیش‌آموزش‌دیده را در چارچوب \lr{PnP} قرار دهید و رفتار آن را هنگام تغییر دامنه تصویر،
+نوع نویز و شدت تخریب بررسی کنید.
+\item یک مدل ویژگی عمومی مانند \lr{DINOv2} را روی تصویر و نسخه‌های تار، نویزی و تغییررنگ‌یافته آن اجرا کنید.
+فاصله ویژگی‌ها را با فاصله پیکسلی مقایسه و درباره ناوردایی و حساسیت بحث کنید.
+\end{enumerate}
+
+\section{تقسیم فصل به ویدئوهای کوتاه}
+
+\begin{videobox}
+\begin{longtable}{p{0.08\textwidth}p{0.36\textwidth}p{0.45\textwidth}}
+\toprule
+\textbf{بخش} & \textbf{موضوع} & \textbf{خروجی روی تخته یا رایانه}\\
+\midrule
+\endhead
+۱ & چرا «تصویر = آرایه پیکسل» کافی نیست؟ & معرفی مدل پیشرو و سه مثال غیرمستقیم.\\
+۲ & تابش، بازتاب و پاسخ طیفی & استخراج رابطه انتگرال طیفی یک کانال.\\
+۳ & اپتیک و \lr{PSF} & ساخت شهودی کانولوشن از پاسخ نقطه.\\
+۴ & پیکسل واقعی، نوردهی و نویز & مدل پواسون ـ گاوسی حسگر.\\
+۵ & نمونه‌برداری و کوانتیزه‌سازی & آزمایش بصری کاهش نرخ نمونه و بیت.\\
+۶ & تابع، ماتریس، بردار و تانسور & تبدیل \lr{shape/reshape/vec} با آزمون.\\
+۷ & فضاها و نرم‌ها & مقایسه \(\ell_1,\ell_2,\ell_\infty,TV\).\\
+۸ & عملگر، الحاقی و آزمون الحاقی & پیاده‌سازی \lr{forward/adjoint}.\\
+۹ & مدل عمومی مسئله معکوس & نوشتن مدل برای تاری، ماسک، \lr{MRI} و فاز.\\
+۱۰ & بدوضعی با \lr{SVD} & نمایش تقویت نویز در مقدار منفرد کوچک.\\
+۱۱ & تیکانوف و سازش بایاس ـ واریانس & استخراج پاسخ بسته و عامل فیلتر.\\
+۱۲ & \lr{TV} و لبه & تفاوت جریمه گرادیان مربعی و خطی.\\
+۱۳ & بیز، پیشین و \lr{MAP} & تبدیل منفی لگاریتم به تابع هدف.\\
+۱۴ & پیشین آموخته‌شده، \lr{PnP} و دیفیوژن & توضیح ظرفیت و خطر توهم.\\
+۱۵ & از پیکسل تا توکن & وصله‌سازی و معادله توجه.\\
+۱۶ & طراحی آزمایش نهایی & معیارها، خطای مدل و بازتولیدپذیری.\\
+\bottomrule
+\end{longtable}
+\end{videobox}
+
+\section{خلاصه فصل}
+
+\begin{enumerate}
+\item تصویر مشاهده‌شده نسخه مستقیم و بی‌واسطه جهان نیست؛ خروجی یک زنجیره اندازه‌گیری است.
+\item مدل پیشرو \(y=\op A(x)+\eta\) ستون فقرات تحلیل پردازش تصویر است.
+\item نمایش‌های تابعی، ماتریسی، برداری و تانسوری مکمل‌اند و هر کدام ابزارهای خاصی فراهم می‌کنند.
+\item کانولوشن نتیجه خطی‌بودن و ناوردایی نسبت به انتقال است، نه صرفاً یک دستور نرم‌افزاری.
+\item بدوضعی از نبود پاسخ، نبود یکتایی یا ناپایداری ناشی می‌شود؛ مقدار منفرد کوچک نویز را تقویت می‌کند.
+\item منظم‌سازی اطلاعاتی فراتر از داده وارد می‌کند و میان برازش و پایداری سازش می‌سازد.
+\item پیشین می‌تواند دست‌ساز، احتمالاتی، ضمنی در حذف‌کننده نویز یا آموخته‌شده توسط مدل مولد باشد.
+\item در مدل‌های مدرن، پیکسل ممکن است به توکن و نمایش تبدیل شود، اما محدودیت اطلاعات و فیزیک همچنان پابرجاست.
+\item کیفیت ادراکی بدون سازگاری داده، به‌ویژه در کاربردهای حساس، کافی نیست.
+\item مهندس حرفه‌ای باید مدل، الگوریتم، کد، آزمایش و گزارش را به یک زنجیره بازتولیدپذیر تبدیل کند.
+\end{enumerate}
+
+\section{واژگان کلیدی فصل}
+
+\begin{tabularx}{\textwidth}{>{\bfseries}p{0.28\textwidth}X}
+مدل پیشرو & نگاشت مجهول فیزیکی یا تصویری به داده اندازه‌گیری‌شده.\\
+مسئله معکوس & تخمین علت یا مجهول از روی اندازه‌گیری‌های مستقیم یا غیرمستقیم.\\
+تابع پخش نقطه‌ای & پاسخ سامانه تصویری به یک منبع نقطه‌ای؛ هسته کانولوشن در سامانه \lr{LSI}.\\
+الحاقی & عملگری که ضرب داخلی خروجی و داده را به ضرب داخلی ورودی و بازفرافکنی تبدیل می‌کند.\\
+بدوضعی & نقض وجود، یکتایی یا پایداری پاسخ.\\
+منظم‌سازی & افزودن قید یا پیشین برای محدودکردن پاسخ و افزایش پایداری.\\
+سازگاری داده & میزان انطباق اندازه‌گیری پیش‌بینی‌شده از پاسخ با داده واقعی.\\
+توهم بازسازی & تولید جزئیات محتمل یا زیبا که به اندازه کافی توسط اندازه‌گیری پشتیبانی نمی‌شوند.\\
+نمایش خودنظارتی & ویژگی آموخته‌شده بدون نیاز به برچسب مستقیم برای هر نمونه.\\
+مدل بنیادی & مدل بزرگ ازپیش‌آموزش‌دیده که قابلیت انتقال به دامنه‌ها یا وظایف متعدد دارد.\\
+\end{tabularx}
+
+% -----------------------------------------------------------------------------
+\backmatter
+\renewcommand{\bibname}{منابع منتخب برای نقشه کتاب و فصل اول}
+\addcontentsline{toc}{chapter}{منابع منتخب}
+\begin{thebibliography}{99}
+\begin{LTR}
+
+\bibitem{gonzalez2018dip}
+R. C. Gonzalez and R. E. Woods,
+\emph{Digital Image Processing}, 4th ed., Pearson, 2018.
+
+\bibitem{szeliski2022cv}
+R. Szeliski,
+\emph{Computer Vision: Algorithms and Applications}, 2nd ed., Springer, 2022.
+
+\bibitem{bertero1998inverse}
+M. Bertero and P. Boccacci,
+\emph{Introduction to Inverse Problems in Imaging}, Institute of Physics Publishing, 1998.
+
+\bibitem{hansen2010inverse}
+P. C. Hansen,
+\emph{Discrete Inverse Problems: Insight and Algorithms}, SIAM, 2010.
+
+\bibitem{beck2017optimization}
+A. Beck,
+\emph{First-Order Methods in Optimization}, SIAM, 2017.
+
+\bibitem{rudin1992tv}
+L. I. Rudin, S. Osher, and E. Fatemi,
+``Nonlinear total variation based noise removal algorithms,''
+\emph{Physica D}, vol. 60, pp. 259--268, 1992.
+
+\bibitem{venkatakrishnan2013pnp}
+S. V. Venkatakrishnan, C. A. Bouman, and B. Wohlberg,
+``Plug-and-Play Priors for Model Based Reconstruction,''
+\emph{IEEE Global Conference on Signal and Information Processing}, pp. 945--948, 2013.
+
+\bibitem{dosovitskiy2021vit}
+A. Dosovitskiy et al.,
+``An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale,''
+\emph{International Conference on Learning Representations}, 2021.
+
+\bibitem{he2022mae}
+K. He, X. Chen, S. Xie, Y. Li, P. Doll\'ar, and R. Girshick,
+``Masked Autoencoders Are Scalable Vision Learners,''
+\emph{CVPR}, pp. 16000--16009, 2022.
+
+\bibitem{zamir2022restormer}
+S. W. Zamir et al.,
+``Restormer: Efficient Transformer for High-Resolution Image Restoration,''
+\emph{CVPR}, pp. 5728--5739, 2022.
+
+\bibitem{ho2020ddpm}
+J. Ho, A. Jain, and P. Abbeel,
+``Denoising Diffusion Probabilistic Models,''
+\emph{Advances in Neural Information Processing Systems}, vol. 33, 2020.
+
+\bibitem{kirillov2023sam}
+A. Kirillov et al.,
+``Segment Anything,''
+\emph{ICCV}, pp. 4015--4026, 2023.
+
+\bibitem{oquab2024dinov2}
+M. Oquab et al.,
+``DINOv2: Learning Robust Visual Features without Supervision,''
+\emph{Transactions on Machine Learning Research}, 2024.
+
+\bibitem{zuo2022optical}
+C. Zuo et al.,
+``Deep learning in optical metrology: a review,''
+\emph{Light: Science \& Applications}, vol. 11, article 39, 2022.
+
+\bibitem{computationalimaging2026}
+Nature Portfolio,
+``Computational Imaging,''
+\emph{Nature Index Topic Overview}, accessed July 2026.
+
+\bibitem{zhou2024segfm}
+T. Zhou et al.,
+``Image Segmentation in Foundation Model Era: A Survey,''
+arXiv:2408.12957, 2024.
+
+\end{LTR}
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,2036 @@
+% !TeX program = xelatex
+% !TeX encoding = UTF-8
+\documentclass[12pt,openany,oneside]{book}
+
+\usepackage[a4paper,top=24mm,bottom=25mm,left=26mm,right=26mm,headheight=16pt]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,mathtools,bm}
+\usepackage{amsthm}
+\usepackage{booktabs,longtable,array,multirow,tabularx}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,shapes.geometric,decorations.pathreplacing,matrix,patterns}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{xepersian}
+
+\settextfont[Scale=1.08]{Amiri}
+\setlatintextfont{DejaVu Serif}
+\setmonofont{DejaVu Sans Mono}
+\setdigitfont{Amiri}
+
+\definecolor{DeepBlue}{HTML}{163A5F}
+\definecolor{Accent}{HTML}{B34B35}
+\definecolor{SoftBlue}{HTML}{EAF2F8}
+\definecolor{SoftGold}{HTML}{FFF6DF}
+\definecolor{SoftGreen}{HTML}{EAF7EF}
+\definecolor{SoftRed}{HTML}{FCEDEC}
+\definecolor{SoftGray}{HTML}{F4F5F6}
+\definecolor{CodeGray}{HTML}{F7F7F7}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=DeepBlue,
+  citecolor=Accent,
+  urlcolor=Accent,
+  pdftitle={پردازش تصویر در دهه آینده ـ فصل دوم: دیجیتالی‌شدن جهان دیداری},
+  pdfauthor={جزوه درس کارشناسی ارشد}
+}
+
+\setstretch{1.22}
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{1.3em}
+\setlist[itemize]{itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{itemsep=0.25em,topsep=0.35em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\small\thepage}
+\fancyhead[RE]{\small پردازش تصویر در دهه آینده}
+\fancyhead[LO]{\small\nouppercase{\leftmark}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{DeepBlue}}
+  {\filleft\Large فصل \thechapter}
+  {8pt}
+  {\filright}
+\titleformat{\section}{\Large\bfseries\color{DeepBlue}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{Accent}}{\thesubsection}{0.7em}{}
+
+\newtheorem{definition}{تعریف}[chapter]
+\newtheorem{theorem}{قضیه}[chapter]
+\newtheorem{proposition}{گزاره}[chapter]
+\newtheorem{lemma}{لم}[chapter]
+\newtheorem{example}{مثال}[chapter]
+\newtheorem{remark}{نکته}[chapter]
+\newtheorem{corollary}{نتیجه}[chapter]
+
+\newtcolorbox{learningbox}{
+  colback=SoftBlue,colframe=DeepBlue,title=اهداف یادگیری,
+  fonttitle=\bfseries,breakable,enhanced}
+\newtcolorbox{keybox}[1][]{
+  colback=SoftGold,colframe=Accent,title={#1},
+  fonttitle=\bfseries,breakable,enhanced}
+\newtcolorbox{futurebox}{
+  colback=SoftGreen,colframe=green!50!black,title=پل به دهه آینده,
+  fonttitle=\bfseries,breakable,enhanced}
+\newtcolorbox{warningbox}{
+  colback=SoftRed,colframe=red!65!black,title=خطای رایج,
+  fonttitle=\bfseries,breakable,enhanced}
+\newtcolorbox{workshopbox}[1][]{
+  colback=SoftGray,colframe=black!55,title={کارگاه خانگی پردازش تصویر: #1},
+  fonttitle=\bfseries,breakable,enhanced}
+\newtcolorbox{researchbox}[1][]{
+  colback=white,colframe=purple!65!black,title={خواندن مقاله و استاندارد: #1},
+  fonttitle=\bfseries,breakable,enhanced}
+\newtcolorbox{videobox}{
+  colback=white,colframe=DeepBlue,title=تقسیم پیشنهادی ویدئوهای ۱۵ دقیقه‌ای,
+  fonttitle=\bfseries,breakable,enhanced}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\inner}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\trans}{^{\mathsf T}}
+\newcommand{\lrterm}[1]{\lr{#1}}
+\newcommand{\vect}[1]{\bm{#1}}
+\newcommand{\op}[1]{\mathcal{#1}}
+\newcommand{\FT}{\mathcal{F}}
+\newcommand{\sinc}{\operatorname{sinc}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\clip}{\operatorname{clip}}
+\newcommand{\argmin}{\operatorname*{arg\,min}}
+\newcommand{\argmax}{\operatorname*{arg\,max}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\nullsp}{\operatorname{null}}
+\newcommand{\PSNR}{\operatorname{PSNR}}
+
+\lstset{
+  language=Python,
+  basicstyle=\small\ttfamily,
+  backgroundcolor=\color{CodeGray},
+  frame=single,
+  rulecolor=\color{black!25},
+  numbers=left,
+  numberstyle=\tiny,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\bfseries,
+  commentstyle=\itshape,
+  tabsize=4
+}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{1cm}
+{\color{DeepBlue}\rule{0.9\textwidth}{1.1pt}}\\[1.05cm]
+{\Huge\bfseries پردازش تصویر در دهه آینده\\[0.3cm]}
+{\LARGE\bfseries از عمق ریاضیات تا مهندس حرفه‌ای\\[0.9cm]}
+{\Large کتاب ـ جزوه درس کارشناسی ارشد و آزمایشگاه پژوهش‌محور\\[1.2cm]}
+
+\begin{tikzpicture}[node distance=8mm]
+\node[draw=DeepBlue,very thick,rounded corners=3mm,fill=SoftBlue,
+      minimum width=13.2cm,minimum height=3.4cm,align=center] (a)
+{\Large\bfseries فصل دوم\\[2mm]
+\large دیجیتالی‌شدن جهان دیداری\\[1mm]
+\normalsize از نظریه نمونه‌برداری و حسگر تا رنگ، \lr{HDR} و تصویربرداری طیفی};
+\node[below=7mm of a,align=center,text width=13.2cm] {
+فصل حاضر میان نظریه کلاسیک شانون، مدل فیزیکی حسگر، استانداردهای رنگ و ویدئو،
+زنجیره \lr{RAW-to-RGB} و پژوهش‌های جدید ضدعلیاسینگ و بازسازی طیفی یک زبان ریاضی مشترک می‌سازد.};
+\end{tikzpicture}
+
+\vfill
+{\large نسخه تفصیلی درس ـ تابستان ۱۴۰۵ / ۲۰۲۶}\\[0.4cm]
+{\normalsize قابل کامپایل با \lr{TeX Live + TeXstudio + XeLaTeX}}\\[0.8cm]
+{\color{DeepBlue}\rule{0.9\textwidth}{1.1pt}}
+\end{titlepage}
+
+\frontmatter
+\chapter*{یادداشت روش‌شناختی فصل دوم}
+\addcontentsline{toc}{chapter}{یادداشت روش‌شناختی فصل دوم}
+
+فصل دوم عمداً از قالب رایج «تعریف رزولوشن، تعداد بیت و چند فضای رنگ» فراتر می‌رود.
+دلیل آن است که در سامانه واقعی، آرایه اعداد تصویر محصول یک عملگر مرکب است: میدان تابشی
+پیوسته به‌وسیله اپتیک هموار می‌شود، روی سطح و زمان نوردهی هر پیکسل انتگرال گرفته می‌شود،
+در فضا و طیف نمونه‌برداری می‌گردد، فوتون‌ها به الکترون تبدیل می‌شوند، نویز شات و خوانش
+وارد می‌شود، مبدل آنالوگ به دیجیتال کوانتیزه می‌کند و سپس خط لوله پردازش سیگنال تصویر
+داده خام را به تصویری مناسب نمایش تبدیل می‌سازد. بنابراین «دیجیتالی‌شدن» یک فرمان نرم‌افزاری
+نیست؛ یک زنجیره فیزیکی، آماری، ادراکی و استانداردی است.
+
+برای نگارش این فصل از سه طبقه منبع استفاده شده است:
+\begin{enumerate}
+\item منابع بنیادی نمونه‌برداری، کوانتیزه‌سازی و رنگ‌سنجی؛
+\item استانداردهای رسمی و جاری، از جمله \lr{EMVA 1288 Release 4.0}،
+      \lr{ISO/CIE 11664-1:2019} و \lr{ITU-R BT.2100-3 (2025)}؛
+\item مقالات پژوهشی معتبر درباره داده خام، ضدعلیاسینگ در شبکه‌های عمیق،
+      مدل‌های مولد و بازسازی طیفی.
+\end{enumerate}
+در هر قسمت کوشش شده است مرز میان «قضیه»، «تقریب مهندسی»، «استاندارد» و «مدل آموخته‌شده»
+شفاف بماند. هر رابطه‌ای که از فرض‌هایی مانند باند‌محدودبودن، کوانتیزه‌سازی پُروضوح، خطی‌بودن
+حسگر یا استقلال نویز استفاده می‌کند، همراه با همان فرض‌ها ارائه می‌شود.
+
+\chapter*{نقشه فشرده فصل}
+\addcontentsline{toc}{chapter}{نقشه فشرده فصل}
+
+\begin{center}
+\begin{tikzpicture}[
+node distance=5.5mm and 6mm,
+box/.style={draw=DeepBlue,rounded corners=2mm,fill=SoftBlue,align=center,
+minimum height=10mm,text width=3.3cm,font=\small},
+arr/.style={-{Latex[length=2.3mm]},thick,DeepBlue}]
+\node[box] (rad) {میدان تابشی پیوسته\\$L(x,y,\lambda,t)$};
+\node[box,right=of rad] (opt) {اپتیک و سطح پیکسل\\$h\ast L$ و انتگرال‌گیری};
+\node[box,right=of opt] (sam) {نمونه‌برداری\\فضایی، زمانی و طیفی};
+\node[box,below=of sam] (sen) {فوتون، الکترون و نویز\\پواسون ـ گاوسی};
+\node[box,left=of sen] (adc) {تقویت و \lr{ADC}\\کوانتیزه‌سازی و اشباع};
+\node[box,left=of adc] (raw) {داده خام و \lr{CFA}\\موزاییک بایر};
+\node[box,below=of raw] (isp) {زنجیره \lr{ISP}\\دموزاییک، رنگ و تون};
+\node[box,right=of isp] (disp) {نمایش و استاندارد\\\lr{sRGB, PQ, HLG}};
+\node[box,right=of disp] (spec) {فراتر از \lr{RGB}\\چندطیفی و فراطیفی};
+\draw[arr] (rad)--(opt); \draw[arr] (opt)--(sam); \draw[arr] (sam)--(sen);
+\draw[arr] (sen)--(adc); \draw[arr] (adc)--(raw); \draw[arr] (raw)--(isp);
+\draw[arr] (isp)--(disp); \draw[arr] (disp)--(spec);
+\end{tikzpicture}
+\end{center}
+
+\tableofcontents
+
+\mainmatter
+\setcounter{chapter}{1}
+\chapter{دیجیتالی‌شدن جهان دیداری}
+\label{ch:digitization}
+
+\begin{learningbox}
+در پایان این فصل، دانشجو باید بتواند:
+\begin{enumerate}
+\item مدل پیوسته تشکیل اندازه‌گیری دیجیتال را از تابش تا کد عددی بنویسد؛
+\item قضیه نمونه‌برداری را در یک و دو بعد اثبات و شرایط واقعی شکست آن را تحلیل کند؛
+\item علیاسینگ را در دوربین، تغییر اندازه و شبکه عصبی از دید طیفی تشخیص دهد؛
+\item خطای کوانتیزه‌سازی، رابطه تقریبی \lr{SQNR} و شروط بهینگی \lr{Lloyd--Max} را استخراج کند؛
+\item نویز شات، خوانش و کوانتیزه‌سازی را در مدل سیگنال به نویز حسگر تفکیک کند؛
+\item تفاوت تعداد بیت، دامنه دینامیکی، ظرفیت چاهک کامل و دامنه نمایش را توضیح دهد؛
+\item اندازه‌گیری موزاییکی \lr{Bayer} و دموزاییک را به‌صورت یک مسئله معکوس بنویسد؛
+\item تبدیل طیف به سه‌مقداری \lr{XYZ/RGB} و پدیده متامریسم را از منظر فضای پوچ تحلیل کند؛
+\item تفاوت داده خطی، \lr{sRGB}، \lr{PQ} و \lr{HLG} را به‌صورت ریاضی بیان کند؛
+\item بدوضعی بازسازی فراطیفی از \lr{RGB} و ضرورت کالیبراسیون واقعی را ارزیابی کند؛
+\item یک آزمایش بازتولیدپذیر طراحی کند که میان کیفیت ظاهری و وفاداری اندازه‌گیری تمایز بگذارد.
+\end{enumerate}
+\end{learningbox}
+
+\section{چرا «تصویر دیجیتال» یک شیء ساده نیست؟}
+
+در فصل نخست تصویر پیوسته را به‌صورت میدان
+\begin{equation}
+L:\Omega\times\Lambda\times\mathcal T\longrightarrow\R_{+},
+\qquad L=L(x,y,\lambda,t)
+\end{equation}
+معرفی کردیم. آرایه‌ای مانند \(I[m,n,c]\) مستقیماً با \(L(x,y,\lambda,t)\) برابر نیست.
+یک مدل جامع‌تر برای کد دیجیتال کانال \(c\) در پیکسل \((m,n)\) چنین است:
+\begin{align}
+\mu_{mnc}
+&=\int_{t_0}^{t_0+T}\int_{\Lambda}\int_{\R^2}
+L(\xi,\upsilon,\lambda,t)\,
+ h_{\lambda}(x_{mn}-\xi,y_{mn}-\upsilon)\,
+ a_{mn}(x,y)\,s_c(\lambda)
+\,d\xi\,d\upsilon\,d\lambda\,dt,\label{eq:continuous-measurement}\\
+N_{mnc}\mid\mu_{mnc}&\sim\operatorname{Poisson}(\eta_c\mu_{mnc}),\label{eq:poisson-electrons}\\
+U_{mnc}&=g_cN_{mnc}+b_c+R_{mnc},\qquad R_{mnc}\sim\mathcal N(0,\sigma_{r,c}^{2}),\label{eq:analog-sensor}\\
+Y_{mnc}&=Q_b\!\left(\clip_{[u_{\min},u_{\max}]}(U_{mnc})\right).
+\label{eq:digital-code}
+\end{align}
+در این مدل، \(h_\lambda\) پاسخ اپتیکی، \(a_{mn}\) تابع دهانه پیکسل، \(s_c\) حساسیت طیفی،
+\(T\) زمان نوردهی، \(\eta_c\) بازده کوانتومی، \(g_c\) بهره، \(b_c\) بایاس،
+\(R_{mnc}\) نویز خوانش و \(Q_b\) کوانتیزه‌کننده \(b\)-بیتی است.
+معادلات \eqref{eq:continuous-measurement} تا \eqref{eq:digital-code} نشان می‌دهند که
+تفکیک‌پذیری فضایی، رنگ، نویز، دامنه دینامیکی و فرمت عددی مسائل جدا از هم نیستند.
+
+\begin{keybox}[اصل محوری فصل]
+هر داده دیجیتال نتیجه یک \textbf{عملگر اندازه‌گیری} و یک \textbf{قرارداد نمایش} است.
+عملگر اندازه‌گیری تعیین می‌کند چه اطلاعاتی وارد داده شده است؛ قرارداد نمایش تعیین می‌کند
+اعداد چگونه باید تفسیر شوند. اشتباه گرفتن این دو، منشأ خطاهایی مانند اعمال فیلتر روی داده
+گامایافته، محاسبه میانگین رنگ در فضای نادرست، گزارش دامنه دینامیکی از روی تعداد بیت و
+آموزش مدل روی نویز مصنوعی غیرواقعی است.
+\end{keybox}
+
+\section{نمونه‌برداری یک‌بعدی: از شانه دیراک تا تکرار طیف}
+
+\subsection{مدل ریاضی نمونه‌برداری ایده‌آل}
+
+برای سیگنال پیوسته \(f\in L^2(\R)\)، شانه دیراک با فاصله \(T_s\) را تعریف می‌کنیم:
+\begin{equation}
+\operatorname{III}_{T_s}(t)=\sum_{n\in\Z}\delta(t-nT_s).
+\end{equation}
+نمونه‌برداری ایده‌آل ضرب توزیعی
+\begin{equation}
+f_s(t)=f(t)\operatorname{III}_{T_s}(t)
+=\sum_{n\in\Z}f(nT_s)\delta(t-nT_s)
+\end{equation}
+است. با قرارداد
+\begin{equation}
+F(\omega)=\int_{-\infty}^{\infty}f(t)e^{-j\omega t}\,dt,
+\end{equation}
+تبدیل فوریه شانه برابر است با
+\begin{equation}
+\FT\{\operatorname{III}_{T_s}\}(\omega)
+=\frac{2\pi}{T_s}\sum_{k\in\Z}\delta(\omega-k\omega_s),
+\qquad \omega_s=\frac{2\pi}{T_s}.
+\end{equation}
+در نتیجه ضرب در زمان به کانولوشن در فرکانس تبدیل می‌شود و داریم
+\begin{equation}
+F_s(\omega)=\frac{1}{T_s}\sum_{k\in\Z}F(\omega-k\omega_s).
+\label{eq:spectral-replication}
+\end{equation}
+این رابطه منشأ دقیق علیاسینگ است: نمونه‌برداری، طیف را حذف نمی‌کند؛ نسخه‌های جابه‌جا‌شده آن را
+روی هم می‌اندازد.
+
+\begin{theorem}[بازسازی شانون ـ نایکوئیست]
+فرض کنید \(F(\omega)=0\) برای \(\abs{\omega}>\Omega_B\) و
+\(\omega_s>2\Omega_B\). آنگاه \(f\) از نمونه‌های \(f(nT_s)\) به‌طور یکتا بازسازی می‌شود:
+\begin{equation}
+f(t)=\sum_{n\in\Z} f(nT_s)\,
+\sinc\!\left(\frac{t-nT_s}{T_s}\right),
+\qquad
+\sinc(u)=\frac{\sin(\pi u)}{\pi u}.
+\label{eq:shannon-reconstruction}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+طبق شرط \(\omega_s>2\Omega_B\)، نسخه‌های طیفی در \eqref{eq:spectral-replication}
+هم‌پوشانی ندارند. فیلتر پایین‌گذر ایده‌آل
+\begin{equation}
+H_r(\omega)=
+\begin{cases}
+T_s,&\abs{\omega}\le \omega_s/2,\\
+0,&\text{در غیر این صورت}
+\end{cases}
+\end{equation}
+نسخه مرکزی را جدا می‌کند، پس \(H_rF_s=F\). پاسخ ضربه این فیلتر
+\begin{equation}
+h_r(t)=\sinc(t/T_s)
+\end{equation}
+است. کانولوشن \(f_s*h_r\) مستقیماً رابطه \eqref{eq:shannon-reconstruction} را می‌دهد.
+یکتایی نیز از این واقعیت حاصل می‌شود که اگر دو تابع باند‌محدود نمونه‌های یکسان داشته باشند،
+تفاضل آن‌ها پس از نمونه‌برداری طیف صفر دارد و در بازه پشتیبانی نیز صفر است؛ بنابراین تفاضل
+تقریباً همه‌جا صفر خواهد بود.
+\end{proof}
+
+\subsection{نرخ نایکوئیست با فرکانس نایکوئیست یکی نیست}
+
+اگر بیشینه فرکانس سیگنال \(f_B\) هرتز باشد، نرخ نمونه‌برداری لازم باید از \(2f_B\) بیشتر باشد.
+کمیت \(2f_B\) «نرخ نایکوئیست سیگنال» و \(f_s/2\) «فرکانس نایکوئیست سامانه نمونه‌برداری» است.
+این دو عبارت در نوشته‌های غیررسمی جابه‌جا می‌شوند، اما در طراحی مهندسی باید جدا بمانند.
+
+\begin{example}
+دو سینوس
+\begin{equation}
+f_1(t)=\cos(2\pi f_1t),\qquad
+f_2(t)=\cos(2\pi(f_1+kf_s)t)
+\end{equation}
+روی نقاط \(t=n/f_s\) نمونه‌های برابر دارند، زیرا
+\begin{equation}
+\cos\!\left(2\pi(f_1+kf_s)\frac{n}{f_s}\right)
+=\cos\!\left(2\pi f_1\frac{n}{f_s}+2\pi kn\right)
+=\cos\!\left(2\pi f_1\frac{n}{f_s}\right).
+\end{equation}
+پس پس از نمونه‌برداری، فرکانس‌ها تنها پیمانه \(f_s\) قابل تشخیص‌اند.
+\end{example}
+
+\subsection{چرا قضیه ایده‌آل برای دوربین کافی نیست؟}
+
+مرور جامع \lr{Unser} نشان می‌دهد که نظریه نمونه‌برداری مدرن صرفاً به سیگنال دقیقاً باند‌محدود
+و بازسازی سینکی محدود نیست؛ نمونه‌های واقعی با پیش‌فیلتر، کرنل اندازه‌گیری، نمونه‌های نامنظم
+و فضاهای مولد عمومی‌تر سروکار دارند \cite{unser2000sampling,papoulis1977generalized,unser2000generalized}.
+در دوربین واقعی:
+\begin{itemize}
+\item صحنه طبیعی دقیقاً باند‌محدود نیست؛
+\item فیلتر پایین‌گذر ایده‌آل غیرعلی و نامتناهی است؛
+\item پیکسل نمونه نقطه‌ای نیست و روی سطح محدود انتگرال می‌گیرد؛
+\item اپتیک، حرکت، فوکوس و پراش تابع انتقال را تغییر می‌دهند؛
+\item شبکه پیکسل ممکن است با شبکه فیلتر رنگ و ساختار صحنه تداخل کند.
+\end{itemize}
+بنابراین شرط عملی، حذف کامل فرکانس‌های خارج باند نیست؛ کاهش انرژی آن‌ها تا سطحی است که
+خطای علیاسینگ نسبت به نویز و هدف کاربرد قابل قبول باشد.
+
+\section{نمونه‌برداری دوبعدی و هندسه شبکه‌ها}
+
+\subsection{شبکه فضایی و شبکه متقابل}
+
+شبکه نمونه‌برداری دوبعدی را با ماتریس وارون‌پذیر \(A\in\R^{2\times2}\) تعریف می‌کنیم:
+\begin{equation}
+\Lambda_s=A\Z^2=\{A\vect n:\vect n\in\Z^2\}.
+\end{equation}
+شانه دوبعدی
+\begin{equation}
+\operatorname{III}_{A}(\vect x)=\sum_{\vect n\in\Z^2}
+\delta(\vect x-A\vect n)
+\end{equation}
+در حوزه فرکانس به شبکه متقابل تبدیل می‌شود:
+\begin{equation}
+\FT\{\operatorname{III}_A\}(\vect\omega)
+=\frac{(2\pi)^2}{\abs{\det A}}
+\sum_{\vect k\in\Z^2}
+\delta\!\left(\vect\omega-2\pi A^{-\trans}\vect k\right).
+\label{eq:reciprocal-lattice}
+\end{equation}
+پس طیف تصویر در نقاط شبکه
+\begin{equation}
+\Lambda_s^*=2\pi A^{-\trans}\Z^2
+\end{equation}
+تکرار می‌شود. شرط عدم علیاسینگ آن است که پشتیبانی طیف با هیچ انتقال غیرصفر خود روی شبکه
+متقابل هم‌پوشانی نداشته باشد:
+\begin{equation}
+\mathcal B\cap(\mathcal B+\vect\omega_k)=\varnothing,
+\qquad \forall \vect\omega_k\in\Lambda_s^*,\quad \vect\omega_k\ne(0,0)^{\mathsf T}.
+\label{eq:2d-no-overlap}
+\end{equation}
+
+\begin{proposition}[شرط شبکه مستطیلی]
+اگر \(A=\diag(T_x,T_y)\) و طیف در مستطیل
+\(\abs{\omega_x}\le\Omega_x\)، \(\abs{\omega_y}\le\Omega_y\) محدود باشد،
+شرط کافی و لازم جدایی نسخه‌ها برابر است با
+\begin{equation}
+\frac{2\pi}{T_x}>2\Omega_x,
+\qquad
+\frac{2\pi}{T_y}>2\Omega_y.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+شبکه متقابل در راستای دو محور به‌ترتیب فاصله‌های \(2\pi/T_x\) و \(2\pi/T_y\) دارد.
+دو مستطیل با نیم‌عرض \(\Omega_x\) و نیم‌ارتفاع \(\Omega_y\) زمانی جدا هستند که فاصله مراکز
+در هر راستا از دو برابر نیم‌پهنای متناظر بیشتر باشد.
+\end{proof}
+
+\subsection{چرا شبکه شش‌ضلعی گاهی کاراتر است؟}
+
+اگر پشتیبانی طیف تقریباً دایروی باشد، مسئله به بسته‌بندی دیسک‌ها در صفحه فرکانس تبدیل می‌شود.
+شبکه متقابل شش‌ضلعی فاصله همسایه‌ها را برای چگالی نمونه معین بهتر توزیع می‌کند؛ ازاین‌رو برای
+طیف همسانگرد می‌تواند نسبت به شبکه مربعی تعداد نمونه کمتری لازم داشته باشد. بااین‌حال حسگرها،
+حافظه‌ها، نمایشگرها و الگوریتم‌ها غالباً مستطیلی‌اند، پس برتری نظری همیشه به برتری سامانه‌ای
+منجر نمی‌شود. این مثال نخستین درس مهم مهندسی است: بهینه‌بودن یک زیرسامانه به معنای بهینه‌بودن
+کل زنجیره نیست.
+
+
+\section{نمونه‌برداری تعمیم‌یافته: اندازه‌گیری با تابع آزمون}
+
+قضیه کلاسیک، نمونه نقطه‌ای \(f(nT)\) را فرض می‌کند، اما حسگر واقعی کمیت
+\begin{equation}
+c_n=\inner{f}{\varphi_n}
+=\int_{\R}f(t)\overline{\varphi_n(t)}\,dt
+\label{eq:generalized-sample}
+\end{equation}
+را می‌سنجد؛ \(\varphi_n\) می‌تواند پاسخ دهانه پیکسل، پاسخ زمانی مدار، PSF یا ترکیبی از آن‌ها باشد.
+اگر \(f\) در فضای بازسازی \(V=\operatorname{span}\{\psi_k\}\) قرار گیرد،
+\begin{equation}
+f=\sum_k a_k\psi_k,
+\qquad
+c_n=\sum_k a_k\inner{\psi_k}{\varphi_n}.
+\end{equation}
+در حالت متناهی، با ماتریس گرَم متقاطع
+\begin{equation}
+G_{nk}=\inner{\psi_k}{\varphi_n}
+\end{equation}
+داریم
+\begin{equation}
+\vect c=G\vect a+\vect\eta.
+\label{eq:generalized-linear}
+\end{equation}
+اگر \(G\) رتبه ستونی کامل داشته باشد، تخمین کمترین مربعات
+\begin{equation}
+\widehat{\vect a}=G^\dagger\vect c
+\end{equation}
+و بازسازی \(\widehat f=\sum_k\widehat a_k\psi_k\) ممکن است. شرط عددی \(G\) تعیین می‌کند نویز تا چه
+اندازه تقویت شود. بنابراین «تعداد کافی نمونه» بدون بررسی هندسه زیر‌فضاها و شرط عددی کافی نیست.
+
+\subsection{کران‌های چارچوب و پایداری}
+
+دنباله \(\{\varphi_n\}\) برای فضای \(V\) یک چارچوب پایدار است اگر اعداد
+\(0<A\le B<\infty\) وجود داشته باشند که
+\begin{equation}
+A\norm{f}_2^2\le
+\sum_n\abs{\inner{f}{\varphi_n}}^2
+\le B\norm{f}_2^2,
+\qquad\forall f\in V.
+\label{eq:frame-bounds}
+\end{equation}
+کران پایین از گم‌شدن جهت‌های غیرصفر جلوگیری می‌کند و کران بالایی انرژی اندازه‌گیری را محدود نگه
+می‌دارد. نسبت \(B/A\) همتای تابعی عدد وضعیت است. هنگامی که \(A\) کوچک باشد، یک مؤلفه تصویر
+پاسخ اندکی در حسگر ایجاد می‌کند و وارون‌سازی آن به نویز حساس می‌شود.
+
+\begin{proposition}[کران خطای بازسازی متناهی]
+در مدل \eqref{eq:generalized-linear} با \(G\) تمام‌رتبه و نویز \(\vect\eta\)،
+\begin{equation}
+\norm{\widehat{\vect a}-\vect a}_2
+\le\frac{1}{\sigma_{\min}(G)}\norm{\vect\eta}_2.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+از \(\widehat{\vect a}-\vect a=G^\dagger\vect\eta\) و
+\(\norm{G^\dagger}_2=1/\sigma_{\min}(G)\) نتیجه حاصل می‌شود.
+\end{proof}
+
+\begin{keybox}[تفسیر برای دوربین]
+اگر دو الگوی مکانی یا طیفی پاسخ تقریباً یکسان در پیکسل‌ها بسازند، افزایش قدرت شبکه بازسازی این
+ابهام را از داده حذف نمی‌کند. شبکه تنها بر اساس پیشین آموزش یکی از پاسخ‌های محتمل را انتخاب می‌کند.
+تحلیل مقدار منفرد عملگر حسگر پیش از انتخاب مدل یادگیری، نشان می‌دهد کدام مؤلفه‌ها واقعاً اندازه‌گیری
+شده و کدام عمدتاً حدس زده می‌شوند.
+\end{keybox}
+
+\section{تغییر نرخ گویا و ساختار چندفازی}
+
+بسیاری از عملیات تغییر اندازه نسبت صحیح ساده ندارند. برای تبدیل نرخ با ضریب \(L/M\)، ابتدا
+درج صفر، سپس فیلتر پایین‌گذر و بعد کاهش نرخ انجام می‌شود:
+\begin{equation}
+y[n]=\sum_k x[k]\,h[nM-kL].
+\label{eq:rational-resampling}
+\end{equation}
+پیاده‌سازی مستقیم محاسبات زیادی روی صفرهای درج‌شده هدر می‌دهد. با تجزیه چندفازی
+\begin{equation}
+h[n]=\sum_{r=0}^{L-1}e_r\!\left[\frac{n-r}{L}\right],
+\qquad e_r[m]=h[mL+r],
+\end{equation}
+تنها فازهای لازم محاسبه می‌شوند. این ساختار در تغییر اندازه تصویر، ویدئو، مبدل‌های نرخ و برخی
+لایه‌های چندمقیاسی شبکه‌ها اهمیت دارد.
+
+\subsection{کرنل‌های متداول و سازش‌های آن‌ها}
+
+\begin{longtable}{p{0.2\textwidth}p{0.29\textwidth}p{0.43\textwidth}}
+\toprule
+کرنل & تعریف یا ویژگی & پیامد مهندسی\\
+\midrule
+\endfirsthead
+\toprule
+کرنل & تعریف یا ویژگی & پیامد مهندسی\\
+\midrule
+\endhead
+نزدیک‌ترین همسایه & نگهداری نزدیک‌ترین نمونه & بسیار سریع؛ بلوکی و نامناسب برای داده پیوسته، ولی برای برچسب قطعه‌بندی درست است.\\
+خطی/دوخطی & کرنل مثلثی \(\Lambda(t)=\max(1-|t|,0)\) & بدون نوسان؛ MTF ضعیف‌تر در فرکانس بالا و محوشدگی.\\
+مکعبی & کرنل قطعه‌ای درجه سه با پارامتر شکل & تیزتر؛ امکان overshoot و وابستگی به پارامتر.\\
+B-spline مکعبی & پایه هموار درجه سه + پیش‌فیلتر ضرایب & مشتق‌پذیری خوب؛ نمونه‌ها مستقیماً ضرایب نیستند.\\
+Lanczos-\(a\) & \(\sinc(t)\sinc(t/a)\) برای \(|t|<a\) & تقریب سینک با پشتیبانی محدود؛ تیزی خوب و امکان ringing.\\
+فیلتر area & میانگین‌گیری متناسب با هم‌پوشانی سطح & برای کاهش اندازه مناسب؛ باید نسبت مقیاس و مرزها درست مدیریت شود.\\
+\bottomrule
+\end{longtable}
+
+\subsection{مرزها بخشی از مدل‌اند}
+
+کانولوشن نزدیک مرز بدون تعریف امتداد تصویر ناقص است. امتداد صفر، ثابت، آینه‌ای، تناوبی و
+برون‌یابی هرکدام یک فرض درباره خارج میدان دید می‌سازند. برای هسته \(h\) و تصویر محدود \(x\)،
+دو پیاده‌سازی با padding متفاوت دو عملگر متفاوت‌اند. در ارزیابی شبکه یا بازسازی، تغییر padding
+می‌تواند خطای لبه، هم‌وردایی نسبت به انتقال و حتی اندازه خروجی را عوض کند.
+
+\section{پیکسل، دهانه و تابع انتقال مدولاسیون}
+
+\subsection{پیکسل نمونه نقطه‌ای نیست}
+
+یک پیکسل مربعی با عرض \(p_x,p_y\) را می‌توان با تابع دهانه
+\begin{equation}
+a(x,y)=\frac{1}{p_xp_y}
+\operatorname{rect}\!\left(\frac{x}{p_x}\right)
+\operatorname{rect}\!\left(\frac{y}{p_y}\right)
+\end{equation}
+مدل کرد. تبدیل فوریه آن
+\begin{equation}
+A(\omega_x,\omega_y)=
+\sinc\!\left(\frac{p_x\omega_x}{2\pi}\right)
+\sinc\!\left(\frac{p_y\omega_y}{2\pi}\right)
+\end{equation}
+است. بنابراین انتگرال‌گیری پیکسل خود یک فیلتر پایین‌گذر با پاسخ سینکی است. اگر فاصله مرکز تا مرکز
+پیکسل \(T_x,T_y\) باشد، نسبت \(p_x/T_x\) و \(p_y/T_y\) «ضریب پُرشدگی» را تعیین می‌کند.
+میکرولنزها برای هدایت فوتون‌ها به ناحیه حساس و افزایش ضریب مؤثر به‌کار می‌روند.
+
+\subsection{ترکیب اپتیک و حسگر}
+
+برای سامانه خطی و ناوردای تقریبی، تابع انتقال کلی حاصل‌ضرب مؤلفه‌هاست:
+\begin{equation}
+\operatorname{OTF}_{\mathrm{sys}}(\vect\omega)
+=\operatorname{OTF}_{\mathrm{opt}}(\vect\omega)
+ A(\vect\omega)
+ \operatorname{OTF}_{\mathrm{motion}}(\vect\omega)
+ \operatorname{OTF}_{\mathrm{other}}(\vect\omega),
+\end{equation}
+و تابع انتقال مدولاسیون
+\begin{equation}
+\operatorname{MTF}(\vect\omega)=
+\abs{\operatorname{OTF}_{\mathrm{sys}}(\vect\omega)}
+\end{equation}
+است. کم‌کردن کنتراست فرکانس‌های نزدیک نایکوئیست لزوماً عیب نیست؛ اگر این کاهش پیش از نمونه‌برداری
+رخ دهد، نقش ضدعلیاسینگ دارد. اما اگر همان هموارسازی پس از نمونه‌برداری انجام شود، علیاسینگ
+قبلاً رخ داده و قابل حذف کامل نیست.
+
+\begin{warningbox}
+عبارت «ابتدا تصویر را کوچک می‌کنم و بعد آن را محو می‌کنم» از دید نظری معادل
+«ابتدا محو می‌کنم و بعد نمونه‌برداری مجدد انجام می‌دهم» نیست. عملگر پایین‌گذر باید پیش از کاهش نرخ
+قرار گیرد. فیلتر پس از کاهش نرخ می‌تواند ظاهر دندانه‌ها را نرم کند، اما اطلاعاتِ تاخورده در باند پایه
+را از هم جدا نمی‌کند.
+\end{warningbox}
+
+\section{علیاسینگ: خطای تصویری، خطای شبکه و خطای مدل مولد}
+
+\subsection{علیاسینگ در تصویر و تغییر اندازه}
+
+الگوهای مورِه، لبه‌های دندانه‌دار، چرخ‌های ظاهراً معکوس در ویدئو و رنگ‌های کاذب پارچه همگی
+صورت‌هایی از ابهام نمونه‌برداری‌اند. برای کاهش اندازه با ضریب صحیح \(M\)، زنجیره درست چنین است:
+\begin{equation}
+y[n]=(x*h)[Mn],
+\end{equation}
+که در آن \(H(e^{j\omega})\) باید عمدتاً خارج از \(\abs{\omega}\le\pi/M\) را تضعیف کند.
+در دو بعد، پیش‌فیلتر باید با هندسه کاهش اندازه و پشتیبانی طیف سازگار باشد.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{sampling_aliasing_zoneplate.png}
+\caption{صفحه ناحیه‌ای مصنوعی برای آشکارسازی علیاسینگ. کاهش نرخ مستقیم، حلقه‌ها و ساختارهایی
+می‌سازد که در صحنه اصلی وجود ندارند؛ پیش‌فیلترکردن پیش از کاهش نرخ انرژی خارج باند را کنترل می‌کند.}
+\label{fig:zoneplate}
+\end{figure}
+
+\subsection{درون‌یابی با بازسازی یکی نیست}
+
+درون‌یابی نزدیک‌ترین همسایه، دوخطی، دو‌مکعبی و \lr{Lanczos} همگی مقادیر میان نمونه‌ها را می‌سازند،
+اما تنها زمانی «بازسازی دقیق» هستند که کرنل با فضای تابعی و مدل نمونه‌برداری سازگار باشد.
+بازسازی سینکی برای تابع باند‌محدود دقیق است، ولی پشتیبانی نامتناهی و نوسان دارد. درون‌یابی
+\lr{B-spline} یک تصویر را در فضای مولد
+\begin{equation}
+V(\varphi)=\left\{\sum_{n\in\Z}c_n\varphi(t-n): c\in\ell_2\right\}
+\end{equation}
+مدل می‌کند؛ ضرایب \(c_n\) عموماً خود نمونه‌ها نیستند و باید با پیش‌فیلتر محاسبه شوند
+\cite{unser1999splines}. بنابراین «انتخاب کرنل» انتخاب یک مدل تابعی است، نه صرفاً ترجیح ظاهری.
+
+\subsection{چرا شبکه کانولوشنی هم علیاس می‌کند؟}
+
+لایه کانولوشن با گام، \lr{max-pooling} و کاهش ابعاد ویژگی‌ها نوعی نمونه‌برداری‌اند. اگر پیش از آن
+پهنای باند کنترل نشود، جابه‌جایی کوچک ورودی می‌تواند خروجی طبقه‌بند را به‌طور نامتناسب تغییر دهد.
+\lr{Zhang} نشان داد افزودن فیلتر پایین‌گذر پیش از زیرنمونه‌برداری می‌تواند ناوردایی نسبت به انتقال را
+بهبود دهد \cite{zhang2019shift}. این مسئله بعداً در معماری‌های مولد به‌صورت جدی‌تر ظاهر شد:
+\lr{StyleGAN3} طراحی پیوسته و ضدعلیاس را برای حذف «چسبیدن بافت به مختصات تصویر» دنبال کرد
+\cite{karras2021stylegan3} و پژوهش \lr{AF-LDM} در \lr{CVPR 2025} نشان داد که علیاسینگ در فضای
+نهفته و توجه می‌تواند سازگاری مدل‌های دیفیوژن نسبت به جابه‌جایی کسری را مختل کند
+\cite{zhou2025afldm}.
+
+\begin{futurebox}
+قضیه نمونه‌برداری متعلق به گذشته نیست. هر جا وضوح مکانی کم می‌شود، توکن‌ها ادغام می‌شوند،
+نقشه ویژگی کوچک می‌شود یا نمایش نهفته در مقیاسی دیگر پردازش می‌گردد، پرسش پهنای باند و علیاسینگ
+بازمی‌گردد. شبکه‌ای که این محدودیت را نادیده می‌گیرد ممکن است روی معیار میانگین خوب باشد، اما در
+جابه‌جایی‌های زیرپیکسلی، ویدئو یا بازسازی تکرارپذیر ناپایدار شود.
+\end{futurebox}
+
+
+\section{نمونه‌برداری زمانی، نوردهی و شاتر غلتان}
+
+تصویر ویدئویی نمونه‌برداری از میدان \(L(x,y,t)\) است. اگر هر فریم در زمان \(nT_f\) نمونه‌برداری
+شود، فرکانس‌های زمانی با فاصله \(2\pi/T_f\) تکرار می‌شوند. چرخ واگن، پره معکوس و سوسوزدن منابع
+LED نمونه‌های علیاس زمانی‌اند. اما دوربین نمونه لحظه‌ای نمی‌گیرد؛ نوردهی مستطیلی با طول \(T_e\)
+فیلتر زمانی
+\begin{equation}
+h_e(t)=\frac1{T_e}\operatorname{rect}\!\left(\frac{t}{T_e}\right)
+\end{equation}
+و پاسخ
+\begin{equation}
+H_e(\omega_t)=\sinc\!\left(\frac{\omega_tT_e}{2\pi}\right)
+\end{equation}
+دارد. نوردهی بلند علیاس زمانی را کاهش می‌دهد، ولی محوشدگی حرکت را افزایش می‌دهد؛ نوردهی کوتاه
+حرکت را منجمد می‌کند، اما فوتون و SNR را کم می‌کند.
+
+\subsection{مدل محوشدگی جسم با سرعت ثابت}
+
+اگر الگوی یک‌بعدی \(f(x-vt)\) با سرعت \(v\) حرکت کند، فریم با نوردهی \(T_e\):
+\begin{align}
+y(x)&=\frac1{T_e}\int_0^{T_e}f(x-vt)\,dt\\
+&=(f*h_m)(x),
+\end{align}
+که \(h_m\) یک هسته جعبه‌ای با طول \(vT_e\) است. پاسخ فرکانسی
+\begin{equation}
+H_m(\omega_x)=e^{-j\omega_xvT_e/2}
+\sinc\!\left(\frac{\omega_xvT_e}{2\pi}\right)
+\end{equation}
+نشان می‌دهد سرعت و نوردهی، صفرهای MTF حرکت را تعیین می‌کنند.
+
+\subsection{شاتر سراسری در برابر شاتر غلتان}
+
+در شاتر سراسری همه ردیف‌ها تقریباً در بازه زمانی یکسان ثبت می‌شوند. در شاتر غلتان، زمان آغاز
+ردیف \(n\) برابر است با
+\begin{equation}
+t_n=t_0+n\tau_r,
+\end{equation}
+که \(\tau_r\) تأخیر خوانش ردیف است. برای جابه‌جایی افقی یکنواخت \(x(t)=x_0+vt\)، مکان ثبت‌شده
+در ردیف \(n\):
+\begin{equation}
+x_n=x_0+v(t_0+n\tau_r)
+\end{equation}
+و در نتیجه خطوط عمودی به خطوط مایل تبدیل می‌شوند. برای حرکت دوربین سه‌بعدی، نگاشت هر ردیف
+ماتریس دوربین متفاوت دارد:
+\begin{equation}
+\vect u_n\sim K[R(t_n)\mid\vect t(t_n)]\vect X.
+\end{equation}
+پس شاتر غلتان صرفاً نویز نیست؛ یک مدل هندسی زمان‌متغیر است و باید در کالیبراسیون، SLAM و بازسازی
+ویدئو وارد شود.
+
+\begin{researchbox}[آزمایش شاتر غلتان]
+یک صفحه شطرنجی را با گوشی در حال پن افقی و با دو زمان نوردهی ثبت کنید. شیب خطوط عمودی، شدت
+محوشدگی و نویز را اندازه بگیرید. سپس مدل \(x_n=x_0+vn\tau_r\) را برازش و زمان تقریبی خوانش کل
+فریم را تخمین بزنید. محدودیت مدل سرعت ثابت را صریح گزارش کنید.
+\end{researchbox}
+
+\section{کوانتیزه‌سازی: نگاشت پیوسته به مجموعه‌ای متناهی}
+
+\subsection{کوانتیزه‌کننده یکنواخت و اشباع}
+
+کوانتیزه‌کننده اسکالر \(Q:\R\to\{r_0,\dots,r_{K-1}\}\) بازه‌های تصمیم
+\(\mathcal R_k=[t_k,t_{k+1})\) را به سطوح بازسازی \(r_k\) می‌فرستد. برای کوانتیزه‌کننده یکنواخت
+روی \([x_{\min},x_{\max}]\) با \(K=2^b\) سطح، گام تقریبی
+\begin{equation}
+\Delta=\frac{x_{\max}-x_{\min}}{2^b-1}
+\end{equation}
+است و نگاشت همراه با اشباع را می‌توان نوشت:
+\begin{equation}
+Q_b(x)=x_{\min}+\Delta\,
+\operatorname{round}\!\left(
+\frac{\clip_{[x_{\min},x_{\max}]}(x)-x_{\min}}{\Delta}
+\right).
+\end{equation}
+خطای کل دو جزء دارد:
+\begin{equation}
+e(x)=Q_b(x)-x=e_{\mathrm{granular}}(x)+e_{\mathrm{overload}}(x).
+\end{equation}
+افزایش بیت خطای دانه‌ای را کم می‌کند، ولی اشباع ناشی از بازه نامناسب را درمان نمی‌کند.
+
+\subsection{استخراج تقریب \(\Delta^2/12\)}
+
+\begin{proposition}[مدل نویز کوانتیزه‌سازی پُروضوح]
+اگر چگالی احتمال ورودی درون هر سلول کوانتیزه‌سازی تقریباً ثابت باشد، اشباع ناچیز باشد و
+خطا با سیگنال هم‌بستگی قوی نداشته باشد، آنگاه
+\begin{equation}
+e_q\sim\mathcal U(-\Delta/2,\Delta/2),
+\qquad \E[e_q]\approx0,
+\qquad \Var(e_q)\approx\frac{\Delta^2}{12}.
+\label{eq:quantization-noise}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+برای توزیع یکنواخت روی \([-\Delta/2,\Delta/2]\)، میانگین به‌دلیل تقارن صفر است و
+\begin{equation}
+\Var(e_q)=\frac{1}{\Delta}
+\int_{-\Delta/2}^{\Delta/2}e^2\,de
+=\frac{1}{\Delta}\left[\frac{e^3}{3}\right]_{-\Delta/2}^{\Delta/2}
+=\frac{\Delta^2}{12}.
+\end{equation}
+\end{proof}
+
+\begin{warningbox}
+رابطه \(\Delta^2/12\) قانون جهان‌شمول نیست. برای سیگنال ثابت، سینوس کم‌دامنه، تعداد بیت کم،
+اشباع یا ورودی هم‌زمان با آستانه‌ها، خطا می‌تواند ساختاری و وابسته به سیگنال باشد. این رابطه یک
+تقریب پُروضوح است و باید با بررسی هیستوگرام و هم‌بستگی خطا آزموده شود.
+\end{warningbox}
+
+\subsection{رابطه تقریبی \(6.02b+1.76\) دسی‌بل}
+
+برای سینوس تمام‌مقیاس با دامنه قله \(A\)، توان سیگنال \(A^2/2\) است. اگر بازه کوانتیزه‌کننده
+تقریباً \([-A,A]\) و \(\Delta\approx2A/2^b\) باشد، آنگاه
+\begin{align}
+\operatorname{SQNR}
+&\approx\frac{A^2/2}{\Delta^2/12}
+=\frac{A^2/2}{(4A^2/2^{2b})/12}
+=\frac{3}{2}2^{2b},\\
+\operatorname{SQNR}_{\mathrm{dB}}
+&\approx10\log_{10}(3/2)+20b\log_{10}2\\
+&\approx1.76+6.02b\quad\mathrm{dB}.
+\label{eq:sqnr-bits}
+\end{align}
+این رابطه درباره یک سینوس تمام‌مقیاس و کوانتیزه‌کننده ایده‌آل است؛ از آن نباید نتیجه گرفت که
+دوربین ۱۲ بیتی حتماً \(74\) دسی‌بل دامنه دینامیکی مفید دارد.
+
+\subsection{کوانتیزه‌سازی بهینه لوید ـ مکس}
+
+برای کمینه‌کردن اعوجاج مربعی
+\begin{equation}
+D=\E[(X-Q(X))^2]
+=\sum_{k=0}^{K-1}\int_{t_k}^{t_{k+1}}(x-r_k)^2p_X(x)\,dx,
+\end{equation}
+شرایط مانایی به دو معادله مشهور می‌رسد \cite{max1960quantizing,lloyd1982least}:
+\begin{align}
+t_k&=\frac{r_{k-1}+r_k}{2},\label{eq:lloyd-threshold}\\
+r_k&=\E[X\mid X\in[t_k,t_{k+1})]
+=\frac{\int_{t_k}^{t_{k+1}}xp_X(x)\,dx}
+{\int_{t_k}^{t_{k+1}}p_X(x)\,dx}.
+\label{eq:lloyd-centroid}
+\end{align}
+الگوریتم تناوبی آستانه‌ها و مراکز را به‌روزرسانی می‌کند و اعوجاج در هر گام افزایش نمی‌یابد،
+اما تضمین بهینه سراسری ندارد. نسخه برداری این ایده به الگوریتم \lr{Linde--Buzo--Gray}
+برای طراحی کدبوک منجر می‌شود \cite{lbg1980vq}.
+
+\subsection{دیتر: تبدیل خطای ساختاری به نویز کنترل‌شده}
+
+اگر پیش از کوانتیزه‌سازی نویز مناسبی افزوده شود، وابستگی خطا به سیگنال کاهش می‌یابد. برای دیتر
+یکنواخت \(D\sim\mathcal U(-\Delta/2,\Delta/2)\):
+\begin{equation}
+Y=Q(X+D).
+\end{equation}
+در دیتر کاهشی، همان \(D\) پس از کوانتیزه‌سازی کم می‌شود. هدف دیتر کمینه‌کردن MSE خام نیست؛
+هدف حذف نواربندی و دکورله‌کردن خطاست. بنابراین ممکن است واریانس افزایش یابد اما خطای ادراکی یا
+سوگیری اندازه‌گیری کاهش پیدا کند.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{quantization_and_dither.png}
+\caption{کوانتیزه‌سازی رمپ خطی با سه بیت. بدون دیتر، خطا به سیگنال قفل می‌شود و نواربندی می‌سازد؛
+دیتر خطا را تصادفی‌تر می‌کند. قضاوت درست نیازمند بررسی هم MSE و هم ساختار خطاست.}
+\label{fig:quantization-dither}
+\end{figure}
+
+\section{فوتون تا کد دیجیتال: مدل آماری حسگر}
+
+\subsection{نویز شات و خوانش}
+
+اگر تعداد فوتون‌های مؤثر مستقل باشد، شمارش الکترون‌های فوتویی را می‌توان تقریباً پواسون دانست:
+\begin{equation}
+N_p\sim\operatorname{Poisson}(\mu_p),
+\qquad \E[N_p]=\Var(N_p)=\mu_p.
+\end{equation}
+پس انحراف معیار نویز شات \(\sqrt{\mu_p}\) و نسبت سیگنال به نویز ایده‌آل
+\begin{equation}
+\operatorname{SNR}_{\mathrm{shot}}=\frac{\mu_p}{\sqrt{\mu_p}}=\sqrt{\mu_p}
+\end{equation}
+است. نویز خوانش را غالباً در واحد الکترون با واریانس \(\sigma_r^2\) مدل می‌کنیم. با فرض استقلال:
+\begin{equation}
+\operatorname{SNR}(\mu_p)=
+\frac{\mu_p}{\sqrt{\mu_p+\sigma_r^2+\sigma_q^2/g^2}}.
+\label{eq:sensor-snr}
+\end{equation}
+این صورت‌بندی با مدل خطی سنجش حسگر در استاندارد \lr{EMVA 1288} هم‌راستا است؛ نسخه جاری
+\lr{Release 4.0} چارچوبی عمومی‌تر برای انواع دوربین ارائه می‌کند \cite{emva1288r4}.
+
+\subsection{دو ناحیه اصلی SNR}
+
+اگر \(\mu_p\ll\sigma_r^2\)، آنگاه
+\begin{equation}
+\operatorname{SNR}\approx\frac{\mu_p}{\sigma_r},
+\end{equation}
+یعنی دو برابرشدن نور تقریباً SNR را دو برابر می‌کند. اگر \(\mu_p\gg\sigma_r^2\)،
+\begin{equation}
+\operatorname{SNR}\approx\sqrt{\mu_p},
+\end{equation}
+و برای دو برابرکردن SNR باید تقریباً چهار برابر فوتون جمع کرد.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\textwidth]{sensor_snr_regimes.png}
+\caption{گذار از ناحیه محدود به نویز خوانش به ناحیه محدود به نویز شات. در نور زیاد، کاهش نویز
+خوانش تقریباً بی‌اثر می‌شود؛ در نور کم، همان کاهش می‌تواند تعیین‌کننده باشد.}
+\label{fig:sensor-snr}
+\end{figure}
+
+\subsection{بهره تبدیل و منحنی انتقال فوتون}
+
+اگر خروجی دیجیتال خطی باشد، مدل ساده
+\begin{equation}
+Y=K N_e+Y_0
+\end{equation}
+را در نظر بگیرید که \(K\) بهره دیجیتال بر الکترون است. با حذف بایاس، در ناحیه محدود به نویز شات:
+\begin{equation}
+\Var(Y)=K^2\Var(N_e)=K^2\E[N_e]=K\E[Y-Y_0].
+\end{equation}
+پس شیب نمودار واریانس برحسب میانگین، \(K\) را تخمین می‌زند. این مبنای \lr{photon transfer curve}
+است. در عمل باید عدم یکنواختی مکانی، نویز تاریک، ناحیه اشباع و خطای تفریق فریم‌ها کنترل شود.
+
+\section{دامنه دینامیکی: بیت، الکترون، استاپ و دسی‌بل}
+
+\subsection{تعریف فیزیکی}
+
+تعریف مفید دامنه دینامیکی حسگر نسبت بیشینه سیگنال قابل استفاده به آستانه کمینه قابل تشخیص است:
+\begin{equation}
+\operatorname{DR}=\frac{\mu_{\mathrm{sat}}}{\mu_{\min}},
+\qquad
+\operatorname{DR}_{\mathrm{dB}}=20\log_{10}\operatorname{DR},
+\qquad
+\operatorname{DR}_{\mathrm{stops}}=\log_2\operatorname{DR}.
+\label{eq:dynamic-range}
+\end{equation}
+در استانداردهای حسگر، \(\mu_{\min}\) با معیار حساسیت مطلق و SNR مشخص تعریف می‌شود، نه صرفاً
+یک کد دیجیتال. ظرفیت چاهک کامل، نویز خوانش، جریان تاریک، یکنواختی و نقطه اشباع همگی مؤثرند.
+
+\begin{example}
+اگر ظرفیت مؤثر \(30000\) الکترون و نویز کف مؤثر \(3\) الکترون باشد،
+\begin{equation}
+\operatorname{DR}=10^4,
+\quad \operatorname{DR}_{\mathrm{dB}}=80\,\mathrm{dB},
+\quad \operatorname{DR}_{\mathrm{stops}}\approx13.29.
+\end{equation}
+استفاده از ADC دوازده‌بیتی به‌تنهایی این دامنه را ایجاد نمی‌کند؛ حتی ممکن است برای نمایش همه
+جزئیات به بهره چندگانه یا کدگذاری غیرخطی نیاز باشد.
+\end{example}
+
+\subsection{چرا تعداد بیت با دامنه دینامیکی برابر نیست؟}
+
+\begin{enumerate}
+\item ADC پر‌بیت نمی‌تواند اطلاعاتی پایین‌تر از کف نویز ایجاد کند.
+\item ADC کم‌بیت ممکن است با بهره قابل تنظیم یا چند نوردهی دامنه صحنه بزرگ‌تری را پوشش دهد.
+\item داده خام خطی، فایل خروجی گامایافته و نمایشگر هر کدام دامنه و تخصیص کد متفاوت دارند.
+\item دامنه دینامیکی صحنه، حسگر، فایل و نمایشگر چهار مفهوم جدا هستند.
+\end{enumerate}
+
+\begin{keybox}[قاعده مهندسی]
+قبل از اعلام «این تصویر ۱۴ بیت است»، سه پرسش بپرسید: واحد فیزیکی هر کد چیست؟ کف نویز چند کد یا
+چند الکترون است؟ اشباع در چه کدی رخ می‌دهد؟ بدون پاسخ این سه پرسش، تعداد بیت عمدتاً مشخصه قالب
+ذخیره‌سازی است، نه کیفیت اندازه‌گیری.
+\end{keybox}
+
+
+\section{عدم‌یکنواختی حسگر و کالیبراسیون تخت ـ تاریک}
+
+مدل یک پیکسل واقعی بهتر است اندیس مکانی داشته باشد:
+\begin{equation}
+Y_{mn}=K_{mn}N_{mn}+B_{mn}+D_{mn}(T_e,\vartheta)+R_{mn},
+\label{eq:nonuniform-sensor}
+\end{equation}
+که \(K_{mn}\) تغییر بهره یا \lr{PRNU}، \(B_{mn}\) آفست، \(D_{mn}\) جریان تاریک وابسته به زمان
+نوردهی و دما \(\vartheta\)، و \(R_{mn}\) نویز موقتی است. تصویر تخت یکنواخت و تصویر تاریک برای
+تخمین این مؤلفه‌ها به‌کار می‌روند.
+
+اگر میانگین چند فریم تاریک \(\widehat B_{mn}\) و پاسخ تخت نرمال‌شده \(\widehat K_{mn}\) باشد،
+تصحیح پایه
+\begin{equation}
+\widehat N_{mn}=\frac{Y_{mn}-\widehat B_{mn}}
+{\widehat K_{mn}+\epsilon}
+\label{eq:flat-field-correction}
+\end{equation}
+است. تقسیم بر بهره بسیار کوچک نویز را تقویت می‌کند؛ بنابراین پیکسل‌های معیوب باید ماسک و
+درون‌یابی شوند، نه اینکه با هر ضریبی اصلاح گردند.
+
+\subsection{انتشار عدم‌قطعیت در تصحیح تخت}
+
+برای تابع \(z=(y-b)/k\)، تقریب مرتبه اول انتشار واریانس:
+\begin{equation}
+\Var(z)\approx
+\frac{1}{k^2}\Var(y)
++\frac{1}{k^2}\Var(b)
++\frac{(y-b)^2}{k^4}\Var(k)
+-\frac{2}{k^2}\Cov(y,b)+\cdots
+\label{eq:flat-uncertainty}
+\end{equation}
+است. پس استفاده از یک فریم تخت پرنویز ممکن است به‌جای بهبود، نویز ضربی وارد کند. میانگین‌گیری
+چند فریم و انتخاب نوردهی تخت نزدیک ولی پایین‌تر از اشباع، عدم‌قطعیت \(\widehat K\) را کاهش می‌دهد.
+
+\subsection{جریان تاریک و دما}
+
+جریان تاریک معمولاً با زمان نوردهی رشد می‌کند و وابستگی شدیدی به دما دارد. کالیبراسیون تاریک باید
+تا حد امکان با همان دما، بهره و زمان نوردهی داده اصلی انجام شود. کم‌کردن یک فریم تاریک منفرد نویز
+آن فریم را نیز به داده اضافه می‌کند؛ استفاده از میانگین یا مدل پارامتری بهتر است.
+
+\begin{warningbox}
+تصحیح تخت پس از گاما یا JPEG از نظر فیزیکی درست نیست، زیرا آفست و بهره در فضای خام خطی تعریف
+شده‌اند. همچنین تراز سفیدی با PRNU یکسان نیست: تراز سفیدی بهره کانال طیفی را تنظیم می‌کند، در حالی
+که تخت‌میدان تغییرات مکانی پاسخ را جبران می‌کند.
+\end{warningbox}
+
+\section{از \lr{RAW} تا \lr{RGB}: موزاییک رنگ و خط لوله دوربین}
+
+\subsection{نمونه‌برداری طیفی با آرایه فیلتر رنگ}
+
+در الگوی مشهور \lr{Bayer RGGB} هر مکان فقط یکی از سه پاسخ طیفی را اندازه می‌گیرد
+\cite{bayer1976patent}. اگر تصویر خطی سه‌کاناله \(\vect x=(x_R,x_G,x_B)\) باشد، داده خام را می‌توان
+به‌صورت
+\begin{equation}
+y= M_R\odot x_R+M_G\odot x_G+M_B\odot x_B+\eta
+\label{eq:bayer-forward}
+\end{equation}
+نوشت که ماسک‌های دودویی جدا و
+\begin{equation}
+M_R+M_G+M_B=\operatorname{ones}
+\end{equation}
+هستند. در هر پیکسل دو رنگ مشاهده نشده‌اند؛ پس دموزاییک یک درون‌یابی ساده مستقل نیست، بلکه
+مسئله‌ای معکوس با اتکا به هم‌بستگی مکانی و بین‌کانالی است.
+
+\subsection{مدل بهینه‌سازی برای دموزاییک}
+
+یک صورت‌بندی پایه:
+\begin{equation}
+\widehat{\vect x}=\argmin_{\vect x}
+\frac12\norm{\op M\vect x-\vect y}_2^2
++\lambda_s\sum_{c\in\{R,G,B\}}\norm{D\vect x_c}_1
++\lambda_c\Phi_{\mathrm{color}}(\vect x),
+\label{eq:demosaic-optimization}
+\end{equation}
+است. جمله نخست سازگاری با نمونه‌های خام، جمله دوم هموارگی قطعه‌ای و جمله سوم سازگاری رنگی را
+تحمیل می‌کند. روش‌های کلاسیک مانند \lr{Malvar--He--Cutler} با فیلترهای خطی اصلاح‌شده از اطلاعات
+گرادیان و تفاوت کانال‌ها بهره می‌برند \cite{malvar2004demosaic}؛ روش‌های جدید دموزاییک و حذف نویز
+را مشترک یاد می‌گیرند \cite{ehret2019joint}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{bayer_demosaicing.png}
+\caption{آزمایش مصنوعی دموزاییک. داده \lr{RGGB} تنها یک مؤلفه را در هر مکان ثبت می‌کند.
+درون‌یابی دوخطی در نواحی نرم مناسب است، اما در لبه و بافت خطای رنگی ایجاد می‌کند.}
+\label{fig:bayer}
+\end{figure}
+
+\subsection{ترتیب عملیات \lr{ISP} و غیرجابجایی آن‌ها}
+
+خط لوله متعارف شامل تصحیح سطح سیاه، تصحیح پیکسل معیوب، کاهش نویز خام، تراز سفیدی، دموزاییک،
+تصحیح سایه‌روشن لنز، تبدیل رنگ، نگاشت تون، شارپ‌سازی و فشرده‌سازی است. عملیات عموماً جابجاپذیر
+نیستند. برای مثال اگر \(G\) تابع گاما و \(H\) فیلتر خطی باشد، عموماً
+\begin{equation}
+G(Hx)\ne H(Gx).
+\end{equation}
+همچنین نویز پواسون ـ گاوسی پس از نگاشت غیرخطی دیگر همان توزیع را ندارد.
+
+مقاله \lr{Unprocessing Images} نشان داد که برای ساخت داده آموزشی واقع‌گرایانه، باید مسیر پردازش
+دوربین را تقریباً معکوس کرد و نویز را در فضای خام خطی وارد نمود \cite{brooks2019unprocessing}.
+این نتیجه یک پیام روش‌شناختی مهم دارد: افزودن نویز سفید گاوسی به JPEG برای آموزش حذف نویز دوربین،
+اغلب با فیزیک حسگر و زنجیره ISP ناسازگار است.
+
+\begin{researchbox}[آزمایش نقد مدل نویز]
+یک تصویر خطی را انتخاب کنید. یک بار نویز پواسون ـ گاوسی را پیش از گاما و یک بار نویز گاوسی هم‌واریانس
+را پس از \lr{sRGB} اضافه کنید. در نواحی تاریک و روشن واریانس شرطی، هیستوگرام باقیمانده و عملکرد
+یک حذف‌کننده نویز ثابت را مقایسه کنید. نتیجه باید نشان دهد «برابری MSE کلی» به معنای برابری مدل
+آماری نیست.
+\end{researchbox}
+
+\section{کالیبراسیون رادیومتریک و تابع پاسخ دوربین}
+
+\subsection{مدل نوردهی و پاسخ}
+
+برای صحنه ساکن، مقدار تابشی پیکسل \(i\) را \(E_i\) و زمان نوردهی تصویر \(j\) را \(\Delta t_j\)
+می‌گیریم. مقدار ثبت‌شده
+\begin{equation}
+Z_{ij}=f(E_i\Delta t_j)
+\end{equation}
+است. اگر \(g=\ln f^{-1}\)، آنگاه
+\begin{equation}
+g(Z_{ij})=\ln E_i+\ln\Delta t_j.
+\label{eq:response-log}
+\end{equation}
+\lr{Debevec--Malik} تابع پاسخ را با کمینه‌سازی خطای داده و قید همواری بر \(g\) برآورد کردند
+\cite{debevec1997hdr}:
+\begin{align}
+\min_{g,\{\ln E_i\}}
+&\sum_{i,j}w(Z_{ij})
+\left[g(Z_{ij})-\ln E_i-\ln\Delta t_j\right]^2\\
+&+\lambda\sum_z w(z)\left[g''(z)\right]^2.
+\label{eq:debevec-objective}
+\end{align}
+برای رفع ابهام مقیاس، یک مقدار مانند \(g(128)=0\) ثابت می‌شود. بانک توابع پاسخ واقعی نشان داده
+است که فضای پاسخ دوربین‌ها ساختار کم‌بعدی دارد، اما یک تابع گامای ثابت برای همه دوربین‌ها فرض
+مطمئنی نیست \cite{grossberg2003crf}.
+
+\subsection{تراز سفیدی و ماتریس تصحیح رنگ}
+
+اگر پاسخ خام \(\vect r\in\R^3\) باشد، تراز سفیدی قطری
+\begin{equation}
+\vect r_w=D_w\vect r,
+\qquad D_w=\diag(g_R,g_G,g_B)
+\end{equation}
+و تبدیل به فضای رنگ مرجع معمولاً با ماتریس
+\begin{equation}
+\vect c=M\vect r_w
+\end{equation}
+انجام می‌شود. در کالیبراسیون خطی کمترین مربعات:
+\begin{equation}
+\widehat M= C R^{\dagger}
+\end{equation}
+است، اما وزن‌دهی ادراکی، محدودیت‌های مثبت‌بودن و تغییر روشنایی می‌توانند صورت‌بندی بهتری لازم کنند.
+یک ماتریس سه‌درسه تنها زمانی کافی است که پاسخ حسگر تقریباً ترکیب خطی توابع تطبیق رنگ مرجع باشد؛
+در غیر این صورت خطای طیفی با نوردهی‌های مختلف تغییر می‌کند.
+
+\section{رنگ‌سنجی: از طیف بی‌نهایت‌بعدی تا سه عدد}
+
+\subsection{سه‌مقداری \lr{CIE XYZ}}
+
+برای توزیع توان طیفی \(S(\lambda)\) و توابع تطبیق رنگ ناظر استاندارد ۱۹۳۱، سه‌مقداری‌ها
+\begin{align}
+X&=k\int S(\lambda)\,\overline x(\lambda)\,d\lambda,\\
+Y&=k\int S(\lambda)\,\overline y(\lambda)\,d\lambda,\\
+Z&=k\int S(\lambda)\,\overline z(\lambda)\,d\lambda
+\end{align}
+هستند. استاندارد جاری \lr{ISO/CIE 11664-1:2019} توابع ناظر استاندارد را تعریف می‌کند
+\cite{cie2019observer}. در گسسته‌سازی با \(L\) طول موج:
+\begin{equation}
+\vect c=A\vect s,
+\qquad A\in\R^{3\times L}.
+\label{eq:spectrum-to-tristimulus}
+\end{equation}
+چون \(L\gg3\)، نگاشت دارای فضای پوچ بزرگ است.
+
+\begin{proposition}[متامریسم به‌عنوان فضای پوچ]
+دو طیف \(\vect s_1,\vect s_2\) برای ناظر و نور مشخص سه‌مقداری یکسان دارند اگر و تنها اگر
+\begin{equation}
+\vect s_1-\vect s_2\in\nullsp(A).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+برابری رنگ‌ها یعنی \(A\vect s_1=A\vect s_2\). با کم‌کردن طرفین،
+\(A(\vect s_1-\vect s_2)=0\)، که تعریف عضویت در فضای پوچ است. جهت عکس نیز فوری است.
+\end{proof}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{spectral_metamerism.png}
+\caption{نمایش عددی متامریسم. دو طیف متفاوت می‌توانند زیر سه تابع حساسیت، پاسخ تقریباً یکسان
+ایجاد کنند. بنابراین بازسازی طیف از RGB بدون پیشین یا اندازه‌گیری اضافی یکتا نیست.}
+\label{fig:metamerism}
+\end{figure}
+
+\subsection{مختصات کروماتیسیته و حذف شدت}
+
+مختصات
+\begin{equation}
+x=\frac{X}{X+Y+Z},\qquad
+y=\frac{Y}{X+Y+Z},\qquad
+z=1-x-y
+\end{equation}
+مقیاس روشنایی مشترک را حذف می‌کنند. این فشرده‌سازی برای نمایش فام و اشباع مفید است، اما اطلاعات
+شدت را از دست می‌دهد و نزدیک سیاه نسبت به نویز ناپایدار می‌شود.
+
+\subsection{فضاهای رنگ دستگاه‌وابسته و دستگاه‌ناوابسته}
+
+\lr{XYZ} به ناظر مرجع مربوط است؛ \lr{RGB} به اولیه‌ها، نقطه سفید و تابع انتقال وابسته است.
+نام «RGB» به‌تنهایی فضای رنگ را مشخص نمی‌کند. برای تفسیر عدد باید دست‌کم بدانیم:
+\begin{itemize}
+\item اولیه‌های قرمز، سبز و آبی و نقطه سفید؛
+\item ماتریس تبدیل به \lr{XYZ}؛
+\item تابع انتقال الکترونیکی؛
+\item دامنه عددی، عمق بیت و نوع کدگذاری؛
+\item اینکه داده صحنه‌مرجع یا نمایش‌مرجع است.
+\end{itemize}
+
+
+\section{استخراج ماتریس RGB، سازگاری رنگی و خطای رنگ}
+
+\subsection{ساخت ماتریس از اولیه‌ها و نقطه سفید}
+
+اگر مختصات کروماتیسیته اولیه \(i\in\{R,G,B\}\) برابر \((x_i,y_i)\) باشد، با انتخاب
+\(Y_i=1\) بردار اولیه نامقیاس
+\begin{equation}
+\vect p_i=\begin{bmatrix}x_i/y_i\\1\\(1-x_i-y_i)/y_i\end{bmatrix}
+\end{equation}
+است. ماتریس \(P=[\vect p_R,\vect p_G,\vect p_B]\) را بسازید. برای نقطه سفید
+\(\vect w=(X_w,Y_w,Z_w)\trans\)، ضرایب مقیاس
+\begin{equation}
+\vect s=P^{-1}\vect w
+\end{equation}
+و ماتریس نهایی
+\begin{equation}
+M_{RGB\to XYZ}=P\diag(\vect s)
+\label{eq:rgbxyz-from-primaries}
+\end{equation}
+است. این استخراج نشان می‌دهد ماتریس RGB قراردادی دلخواه نیست؛ از اولیه‌ها و سفید مرجع حاصل می‌شود.
+
+\subsection{سازگاری رنگی و مدل Bradford}
+
+تغییر نور مرجع با یک تبدیل سازگاری رنگی مدل می‌شود. در مدل Bradford، ابتدا XYZ به فضای پاسخ
+مخروطی تقریبی تبدیل می‌شود:
+\begin{equation}
+\vect l=M_B\vect x,
+\qquad
+M_B=\begin{bmatrix}
+0.8951&0.2664&-0.1614\\
+-0.7502&1.7135&0.0367\\
+0.0389&-0.0685&1.0296
+\end{bmatrix}.
+\end{equation}
+برای سفید مبدأ \(\vect w_s\) و مقصد \(\vect w_d\):
+\begin{equation}
+M_{\mathrm{CAT}}=M_B^{-1}
+\diag\!\left(\frac{M_B\vect w_d}{M_B\vect w_s}\right)M_B.
+\label{eq:bradford}
+\end{equation}
+تقسیم در \eqref{eq:bradford} مؤلفه‌به‌مؤلفه است. مدل فرض می‌کند سازگاری عمدتاً با مقیاس‌کردن
+پاسخ‌های مخروطی رخ می‌دهد؛ برای منابع بسیار غیرعادی یا مواد فلورسنت ممکن است خطا باقی بماند.
+
+\subsection{CIELAB و مفهوم یکنواختی ادراکی}
+
+برای سفید مرجع \((X_n,Y_n,Z_n)\)، تابع
+\begin{equation}
+f(t)=\begin{cases}
+t^{1/3},&t>\delta^3,\\
+\dfrac{t}{3\delta^2}+\dfrac{4}{29},&t\le\delta^3,
+\end{cases}
+\qquad \delta=\frac6{29}
+\end{equation}
+و مختصات
+\begin{align}
+L^*&=116f(Y/Y_n)-16,\\
+a^*&=500[f(X/X_n)-f(Y/Y_n)],\\
+b^*&=200[f(Y/Y_n)-f(Z/Z_n)]
+\end{align}
+تعریف می‌شوند. فاصله ساده
+\begin{equation}
+\Delta E_{ab}^*=\sqrt{(\Delta L^*)^2+(\Delta a^*)^2+(\Delta b^*)^2}
+\end{equation}
+کاملاً یکنواخت ادراکی نیست؛ فرمول‌های پیشرفته‌تر مانند CIEDE2000 وزن فام، کروما و روشنایی را
+اصلاح می‌کنند. در گزارش علمی باید دقیقاً نام نسخه \(\Delta E\)، سفید مرجع و شرایط مشاهده ذکر شود.
+
+\begin{example}[خطای رنگ در برابر خطای RGB]
+دو خطای RGB با نرم اقلیدسی برابر می‌توانند \(\Delta E\) بسیار متفاوت بسازند، زیرا ماتریس رنگ،
+تابع انتقال و حساسیت ادراک در نواحی مختلف فضا یکسان نیست. به همین دلیل ارزیابی تصحیح رنگ تنها با
+PSNR کانال‌ها کافی نیست.
+\end{example}
+
+\section{داده خطی، \lr{sRGB} و محاسبات درست روی رنگ}
+
+برای مؤلفه خطی نرمال‌شده \(C\in[0,1]\)، تابع کدگذاری \lr{sRGB} به‌صورت قطعه‌ای است
+\cite{iec61966srgb}:
+\begin{equation}
+C'=
+\begin{cases}
+12.92C,&C\le0.0031308,\\
+1.055C^{1/2.4}-0.055,&C>0.0031308.
+\end{cases}
+\label{eq:srgb-oetf}
+\end{equation}
+وارون آن:
+\begin{equation}
+C=
+\begin{cases}
+C'/12.92,&C'\le0.04045,\\
+\left(\dfrac{C'+0.055}{1.055}\right)^{2.4},&C'>0.04045.
+\end{cases}
+\label{eq:srgb-inverse}
+\end{equation}
+
+\begin{example}[میانگین‌گیری در فضای نادرست]
+فرض کنید یک پیکسل خطی سیاه \(0\) و دیگری سفید \(1\) است. میانگین فیزیکی خطی \(0.5\) است که در
+sRGB تقریباً به \(0.735\) کد می‌شود. اما میانگین مستقیم کدهای \(0\) و \(1\) برابر \(0.5\) است که
+پس از خطی‌سازی تقریباً \(0.214\) می‌شود. بنابراین کوچک‌سازی، محوشدگی، آلفا‌بلندینگ و تخمین نور
+اگر بر داده گامایافته انجام شوند، می‌توانند روشنایی را به‌طور سیستماتیک کاهش دهند.
+\end{example}
+
+\begin{warningbox}
+فایل هشت‌بیتی \lr{PNG/JPEG} معمولاً داده خطی حسگر نیست. قبل از هر عملیات فیزیکی یا آماری باید
+پروفایل رنگ و تابع انتقال خوانده و در صورت نیاز داده خطی شود. واژه «نرمال‌سازی به بازه صفر و یک»
+هیچ تضمینی درباره خطی‌بودن نمی‌دهد.
+\end{warningbox}
+
+\section{دامنه دینامیکی بالا: از ادغام نوردهی تا استاندارد نمایش}
+
+\subsection{بازسازی تابش از چند نوردهی}
+
+پس از تخمین \(g\)، تابش لگاریتمی هر پیکسل از میانگین وزن‌دار
+\begin{equation}
+\ln\widehat E_i=
+\frac{\sum_j w(Z_{ij})[g(Z_{ij})-\ln\Delta t_j]}
+{\sum_j w(Z_{ij})}
+\label{eq:hdr-radiance}
+\end{equation}
+به‌دست می‌آید. وزن در کدهای نزدیک سیاه و اشباع کم می‌شود. حرکت صحنه، تغییر نور، فلر، نویز و
+عدم خطی‌بودن محلی می‌توانند شبح ایجاد کنند؛ بنابراین HDR چندنوردهی تنها یک میانگین ساده نیست.
+
+\subsection{نگاشت تون و جدایی صحنه از نمایش}
+
+اگر تابش صحنه \(E\) دامنه بسیار بزرگی داشته باشد، اپراتور نگاشت تون
+\begin{equation}
+T:E\mapsto L_d
+\end{equation}
+آن را به درخشندگی قابل نمایش نگاشت می‌کند. اپراتور سراسری تنها تابعی از مقدار هر پیکسل است؛
+اپراتور محلی به همسایگی وابسته است و می‌تواند هاله بسازد. ارزیابی باید میان حفظ ترتیب روشنایی،
+کنتراست محلی، رنگ و طبیعی‌بودن تمایز بگذارد.
+
+\subsection{استاندارد جاری \lr{BT.2100-3}: دو مسیر PQ و HLG}
+
+نسخه \lr{BT.2100-3} در فوریه ۲۰۲۵ مشخصات تولید و تبادل بین‌المللی HDR را با دو روش
+\lr{Perceptual Quantization (PQ)} و \lr{Hybrid Log-Gamma (HLG)} تعیین می‌کند
+\cite{iturbt2100_3}. در PQ، درخشندگی نمایش تا \(10000\,\mathrm{cd/m^2}\) به‌صورت مطلق کد می‌شود.
+با \(Y=F_D/10000\)، تابع وارون EOTF را می‌توان نوشت:
+\begin{equation}
+E'=\left(\frac{c_1+c_2Y^{m_1}}{1+c_3Y^{m_1}}\right)^{m_2},
+\label{eq:pq}
+\end{equation}
+که
+\begin{align}
+m_1&=\frac{2610}{16384}, &
+m_2&=\frac{2523}{4096}\times128, &
+c_1&=\frac{3424}{4096},\\
+c_2&=\frac{2413}{4096}\times32, &
+c_3&=\frac{2392}{4096}\times32.&&
+\end{align}
+HLG یک کدگذاری نسبی و سازگارتر با زنجیره پخش است. OETF صحنه آن به‌صورت
+\begin{equation}
+E'=\begin{cases}
+\sqrt{3E},&0\le E\le1/12,\\
+a\ln(12E-b)+c,&1/12<E\le1,
+\end{cases}
+\label{eq:hlg}
+\end{equation}
+با
+\begin{equation}
+a=0.17883277,\qquad b=1-4a,\qquad c=0.5-a\ln(4a)
+\end{equation}
+تعریف می‌شود.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{transfer_functions_srgb_pq_hlg.png}
+\caption{مقایسه توابع انتقال. شکل خطی، sRGB، HLG و PQ کدها را با اهداف متفاوت تخصیص می‌دهند؛
+قرار دادن آن‌ها در یک نمودار به معنای هم‌ارزبودن نقش استانداردی آن‌ها نیست.}
+\label{fig:transfer-curves}
+\end{figure}
+
+\begin{keybox}[HDR فقط «افکت» نیست]
+HDR واقعی دست‌کم چهار لایه دارد: دامنه صحنه و نوردهی، ظرفیت و نویز حسگر، نمایش عددی و فراداده،
+و قابلیت نمایشگر و محیط مشاهده. افزایش اشباع و کنتراست محلی یک JPEG، داده HDR یا تولید مطابق
+استاندارد ایجاد نمی‌کند.
+\end{keybox}
+
+\section{پهنه رنگ وسیع و استانداردهای \lr{BT.709/BT.2020}}
+
+استاندارد \lr{BT.709} پایه HDTV و \lr{BT.2020} مشخصات UHDTV و اولیه‌های پهنه رنگ وسیع‌تر را
+ارائه می‌کنند \cite{iturbt709,iturbt2020}. \lr{BT.2100} برای HDR از رنگ‌سنجی سازگار با
+\lr{BT.2020} استفاده می‌کند. تبدیل خطی میان RGB و XYZ با ماتریس مشتق‌شده از مختصات اولیه‌ها و
+نقطه سفید انجام می‌شود:
+\begin{equation}
+\begin{bmatrix}X\\Y\\Z\end{bmatrix}
+=M_{RGB\to XYZ}
+\begin{bmatrix}R\\G\\B\end{bmatrix}.
+\end{equation}
+اگر رنگی خارج از مثلث اولیه‌ها باشد، نگاشت به gamut لازم است. بریدن مستقل کانال‌ها
+\begin{equation}
+(R,G,B)\mapsto(\clip R,\clip G,\clip B)
+\end{equation}
+می‌تواند فام و روشنایی را تغییر دهد؛ نگاشت ادراکی باید تعادل میان حفظ فام، اشباع و جزئیات را
+مدیریت کند.
+
+\section{چندطیفی و فراطیفی: وقتی سه کانال کافی نیست}
+
+\subsection{مکعب طیفی و مدل اندازه‌گیری}
+
+تصویر فراطیفی گسسته را با تانسور
+\begin{equation}
+X\in\R^{H\times W\times L}
+\end{equation}
+نمایش می‌دهیم. اندازه‌گیری RGB برای هر پیکسل
+\begin{equation}
+y_c=\sum_{\ell=1}^{L}s_c(\lambda_\ell)
+X(\lambda_\ell)\Delta\lambda+\eta_c,
+\qquad c\in\{R,G,B\}
+\end{equation}
+است. در شکل ماتریسی \(\vect y=S\vect x+\eta\) با \(S\in\R^{3\times L}\). چون
+\(\rank(S)\le3\)، بازسازی \(L\)-باندی از سه عدد شدیداً کم‌معادله است.
+
+\subsection{خانواده‌های سامانه تصویربرداری طیفی}
+
+\begin{longtable}{p{0.22\textwidth}p{0.28\textwidth}p{0.42\textwidth}}
+\toprule
+خانواده & نوع نمونه‌برداری & مزیت و محدودیت اصلی\\
+\midrule
+\endfirsthead
+\toprule
+خانواده & نوع نمونه‌برداری & مزیت و محدودیت اصلی\\
+\midrule
+\endhead
+\lr{Push-broom} & یک خط مکانی × طیف کامل & وضوح طیفی خوب؛ نیازمند حرکت اسکن و حساس به حرکت صحنه.\\
+\lr{Whisk-broom} & نقطه یا خط اسکن‌شونده & کالیبراسیون دقیق؛ کند و مکانیکی.\\
+فیلتر قابل تنظیم & چند تصویر در طول موج‌های مختلف & انعطاف طیفی؛ نامناسب برای صحنه پویا.\\
+\lr{MSFA} & فیلترهای طیفی موزاییکی روی حسگر & تک‌نما و فشرده؛ نیازمند دموزاییک طیفی ـ مکانی.\\
+تصویربرداری فشرده & کدگذاری اپتیکی و بازسازی محاسباتی & ثبت تک‌نما؛ مسئله معکوس دشوار و وابسته به کالیبراسیون.\\
+بازسازی از RGB & تخمین طیف با پیشین آموخته‌شده & سخت‌افزار ارزان؛ ذاتاً بدوضع و آسیب‌پذیر به شکاف دامنه.\\
+\bottomrule
+\end{longtable}
+
+\subsection{ARAD\_1K و مسئله واقع‌گرایی داده}
+
+مجموعه \lr{ARAD\_1K} در چالش \lr{NTIRE 2022} شامل ۱۰۰۰ تصویر طبیعی فراطیفی معرفی شد؛
+داده اصلی ۲۰۴ باند در بازه تقریبی ۴۰۰ تا ۱۰۰۰ نانومتر دارد و برای چالش بازسازی طیفی، نسخه
+۳۱ باندی در بازه ۴۰۰ تا ۷۰۰ نانومتر نیز به‌کار رفت \cite{arad2022ntire}.
+این مجموعه مقیاس ارزیابی را افزایش داد، اما یک خطر روش‌شناختی باقی می‌ماند: اگر RGB آموزشی با
+ضرب عددی طیف و حساسیت معلوم ساخته شود، مدل ممکن است نگاشت همان دوربین مصنوعی را بیاموزد و روی
+دوربین واقعی با پاسخ، نویز، ISP و فشرده‌سازی متفاوت افت کند.
+
+\subsection{پیشین‌های کم‌بعدی و مدل‌های آموخته‌شده}
+
+یک مدل کلاسیک طیف را در پایه کم‌بعدی می‌نویسد:
+\begin{equation}
+\vect x=B\vect\alpha+\vect r,
+\qquad B\in\R^{L\times d},\quad d\ll L.
+\end{equation}
+اگر \(SB\) رتبه ستونی کامل داشته باشد، ضرایب با
+\begin{equation}
+\widehat{\vect\alpha}
+=\argmin_{\vect\alpha}\norm{S B\vect\alpha-\vect y}_2^2
++\lambda\norm{\vect\alpha}_2^2
+\end{equation}
+قابل تخمین‌اند. شبکه‌های عمیق پایه و پیشین را از داده می‌آموزند، اما عدم یکتایی فیزیکی حذف نمی‌شود؛
+مدل تنها یک طیف محتمل شرطی بر توزیع آموزش را انتخاب می‌کند. در کاربرد شیمیایی یا پزشکی، لازم است
+عدم‌قطعیت، خطای طیفی و انتقال بین دوربین‌ها گزارش شود، نه فقط PSNR تصویر RGB بازسازی‌شده.
+
+\begin{futurebox}
+روند آینده به هم‌طراحی اپتیک، حسگر و مدل یادگیری می‌رود: فیلتر یا ماسک کدگذاری‌شده همراه با شبکه
+بازسازی آموزش داده می‌شود. بااین‌حال طراحی انتهابه‌انتها اگر مدل پیشرو، محدودیت ساخت، نویز و رانش
+کالیبراسیون را نادیده بگیرد، ممکن است در شبیه‌سازی عالی و در سخت‌افزار ضعیف باشد. شکاف
+\lr{simulation-to-real} در تصویربرداری محاسباتی یک مسئله درجه‌اول است، نه جزئیات پیاده‌سازی.
+\end{futurebox}
+
+
+\section{عدم‌قطعیت بازسازی طیفی و طراحی باندهای اندازه‌گیری}
+
+\subsection{کران کرامر ـ رائو در مدل خطی گاوسی}
+
+مدل طیفی پارامتری
+\begin{equation}
+\vect y=S B\vect\alpha+\vect\eta,
+\qquad \vect\eta\sim\mathcal N(0,\Sigma)
+\end{equation}
+را در نظر بگیرید. ماتریس اطلاعات فیشر برای \(\vect\alpha\):
+\begin{equation}
+J(\vect\alpha)=B\trans S\trans\Sigma^{-1}SB.
+\end{equation}
+برای هر تخمین‌گر نااریب:
+\begin{equation}
+\Cov(\widehat{\vect\alpha})\succeq J^{-1}.
+\label{eq:spectral-crlb}
+\end{equation}
+اگر \(SB\) کم‌رتبه یا بدشرط باشد، بعضی ضرایب عدم‌قطعیت بزرگی دارند. این رابطه معیار مستقیمی برای
+طراحی فیلترهای طیفی می‌دهد: باندها باید اطلاعات مکمل ایجاد کنند، نه نسخه‌های تقریباً تکراری.
+
+\subsection{معیارهای طراحی حسگر طیفی}
+
+چند معیار کلاسیک برای انتخاب پارامتر حسگر \(\theta\) عبارت‌اند از:
+\begin{align}
+\text{A-optimal:}&\quad \min_\theta\operatorname{tr}(J_\theta^{-1}),\\
+\text{D-optimal:}&\quad \max_\theta\log\det J_\theta,\\
+\text{E-optimal:}&\quad \max_\theta\lambda_{\min}(J_\theta).
+\end{align}
+A-optimal میانگین واریانس، D-optimal حجم بیضوی عدم‌قطعیت و E-optimal بدترین جهت را کنترل می‌کند.
+در طراحی واقعی باید عبور نور، پهنای باند فیلتر، امکان ساخت، زاویه ورود، دما و رانش طیفی نیز قید شوند.
+
+\subsection{تفکیک خطای مدل و عدم‌قطعیت آماری}
+
+حتی اگر واریانس نویز کوچک باشد، فرض زیر‌فضای \(B\) ممکن است طیف واقعی را خوب نمایش ندهد:
+\begin{equation}
+\vect x=B\vect\alpha+\vect r_{\mathrm{model}}.
+\end{equation}
+خطای \(\vect r_{\mathrm{model}}\) با جمع‌کردن داده بیشتر لزوماً صفر نمی‌شود. گزارش عدم‌قطعیت باید
+حداقل سه جزء را جدا کند: نویز اندازه‌گیری، عدم‌قطعیت پارامتر و خطای مدل/شکاف دامنه. شبکه بیزی یا
+ensemble تنها زمانی معنادار است که این منابع در داده آموزش و ارزیابی بازنمایی شوند.
+
+\begin{researchbox}[طراحی کانال چهارم]
+با حساسیت‌های RGB معلوم و یک بانک طیف مواد، یک تابع حساسیت چهارم را از خانواده گاوسی طراحی کنید.
+مرکز و پهنای باند را با معیار E-optimal انتخاب و نشان دهید کوچک‌ترین مقدار منفرد عملگر چگونه تغییر
+می‌کند. سپس به‌جای PSNR، بهبود خطای تشخیص ماده را نیز بسنجید.
+\end{researchbox}
+
+\section{معیارهای ارزیابی: کدام خطا واقعاً مهم است؟}
+
+\subsection{معیارهای عددی پایه}
+
+برای تصویر مرجع \(x\) و تخمین \(\widehat x\) با \(N\) مقدار:
+\begin{align}
+\operatorname{MSE}&=\frac1N\norm{x-\widehat x}_2^2,\\
+\operatorname{PSNR}&=10\log_{10}\frac{L_{\max}^2}{\operatorname{MSE}}.
+\end{align}
+PSNR به دامنه و فضای محاسبه وابسته است. PSNR روی sRGB و PSNR روی تابش خطی دو پرسش متفاوت‌اند.
+برای طیف، معیارهایی مانند خطای نسبی و زاویه طیفی مفیدند:
+\begin{equation}
+\operatorname{SAM}(\vect x,\widehat{\vect x})
+=\arccos\frac{\inner{\vect x}{\widehat{\vect x}}}
+{\norm{\vect x}_2\norm{\widehat{\vect x}}_2}.
+\end{equation}
+SAM نسبت به مقیاس مشترک بی‌حس است، پس باید همراه با معیار دامنه گزارش شود.
+
+\subsection{جدول «هدف ـ فضای درست ـ معیار»}
+
+\begin{longtable}{p{0.25\textwidth}p{0.25\textwidth}p{0.42\textwidth}}
+\toprule
+هدف & فضای محاسبه & معیارهای مناسب\\
+\midrule
+\endfirsthead
+\toprule
+هدف & فضای محاسبه & معیارهای مناسب\\
+\midrule
+\endhead
+وفاداری حسگر & RAW خطی، پس از کالیبراسیون & بایاس، واریانس، SNR، خطای پارامتر، نسبت اشباع.\\
+بازسازی تابش & خطی صحنه‌مرجع & MSE/PSNR خطی، خطای نسبی، سازگاری داده.\\
+کیفیت نمایش & فضای رنگ و شرایط نمایش مشخص & معیار ادراکی، آزمون انسانی، خطای رنگ.\\
+دموزاییک & خطی پیش از گاما و نیز خروجی نمایش & PSNR رنگی، zipper/false color، لبه و بافت.\\
+بازسازی طیفی & بازتاب/تابش طیفی کالیبره & RMSE طیفی، SAM، خطای ماده/طبقه‌بندی downstream.\\
+HDR & صحنه و نمایش هر دو مشخص & خطای تابش، کیفیت تون، شبح، clipping و آزمون نمایش.\\
+\bottomrule
+\end{longtable}
+
+
+\section{نمایش عددی، نرخ داده و فراداده}
+
+\subsection{عدد صحیح، ممیز شناور و دقت مؤثر}
+
+ذخیره RAW دوازده‌بیتی در ظرف شانزده‌بیتی به معنای شانزده بیت اطلاعات نیست. از سوی دیگر تبدیل زودهنگام
+به هشت‌بیت می‌تواند جزئیات پایین‌تر از یک کد را حذف کند. در محاسبات، ممیز شناور نیمه‌دقت
+\lr{float16} دامنه نمایی مناسب ولی مانتیسای محدود دارد؛ جمع تعداد زیادی مقدار یا اختلاف دو عدد نزدیک
+می‌تواند خطای گردکردن ایجاد کند. برای جمع نوردهی، کالیبراسیون و برآورد واریانس، float32 یا float64
+اغلب امن‌تر است.
+
+تعداد بیت مؤثر ADC را می‌توان از SINAD در آزمون سینوسی تعریف کرد:
+\begin{equation}
+\operatorname{ENOB}=\frac{\operatorname{SINAD}_{\mathrm{dB}}-1.76}{6.02}.
+\end{equation}
+این کمیت اعوجاج و نویز را در بر می‌گیرد و با عرض کلمه اسمی برابر نیست.
+
+\subsection{برآورد نرخ داده}
+
+برای \(N_x\times N_y\) پیکسل، \(C\) کانال، \(b\) بیت و نرخ \(f\) فریم بر ثانیه، نرخ خام
+\begin{equation}
+R=N_xN_yCbf\quad\text{bit/s}
+\label{eq:data-rate}
+\end{equation}
+است. دوربین تک‌حسگر Bayer پیش از دموزاییک \(C=1\) نمونه در هر پیکسل دارد، نه سه نمونه؛ اما پس از
+دموزاییک حافظه محاسباتی سه‌کاناله می‌شود. سربار بسته‌بندی، خط خالی، فراداده و پروتکل باید جدا افزوده
+شود.
+
+\begin{example}
+برای تصویر \(4096\times2160\)، RAW دوازده‌بیتی و ۶۰ فریم‌برثانیه:
+\begin{equation}
+R\approx4096\times2160\times12\times60
+\approx6.37\times10^9\ \text{bit/s},
+\end{equation}
+یعنی حدود \(0.80\) گیگابایت‌برثانیه پیش از سربار. این محاسبه نشان می‌دهد چرا فشرده‌سازی، پردازش
+روی حسگر و انتخاب ROI مسائل معماری‌اند.
+\end{example}
+
+\subsection{فراداده بخشی از داده علمی است}
+
+برای بازتولید یک تصویر، ذخیره آرایه کافی نیست. حداقل فراداده مطلوب:
+\begin{itemize}
+\item زمان نوردهی، ISO/بهره، دیافراگم و دما؛
+\item الگوی CFA، سطح سیاه، سفید اشباع و عمق بیت؛
+\item ماتریس رنگ، سفید مرجع و پروفایل/تابع انتقال؛
+\item هندسه پیکسل، فاصله کانونی، اعوجاج و زمان خوانش؛
+\item واحد طیفی، طول موج‌ها، پهنای باند و فایل کالیبراسیون؛
+\item نسخه نرم‌افزار، ترتیب ISP و هر clipping یا نرمال‌سازی.
+\end{itemize}
+حذف فراداده می‌تواند آرایه‌ای ظاهراً سالم را از نظر علمی غیرقابل تفسیر کند.
+
+\begin{keybox}[قرارداد نام‌گذاری پیشنهادی]
+در نام یا مشخصات هر آرایه بنویسید: \lr{domain} (RAW/linear/display)، \lr{units}،
+\lr{range}، \lr{dtype}، \lr{color space} و \lr{transfer function}. مثلاً
+\lr{linear	extunderscore cameraRGB	extunderscore electrons	extunderscore float32} بسیار گویاتر از
+\lr{image	extunderscore normalized} است.
+\end{keybox}
+
+\section{مطالعه موردی یکپارچه: طراحی دوربین بازرسی سطح}
+
+فرض کنید باید ترک‌های باریک و لکه‌های رنگی روی سطح متحرک را در خط تولید تشخیص دهیم. سرعت سطح
+\(v\)، اندازه کوچک‌ترین عیب \(d\)، میدان دید \(W\)، تعداد پیکسل افقی \(N_x\) و زمان نوردهی \(T\)
+هستند.
+
+\subsection{قید نمونه‌برداری مکانی}
+
+گام نمونه‌برداری روی جسم
+\begin{equation}
+p_o=\frac{W}{N_x}
+\end{equation}
+است. برای داشتن دست‌کم \(q\) نمونه روی عیب:
+\begin{equation}
+p_o\le\frac{d}{q}.
+\label{eq:defect-sampling}
+\end{equation}
+اما این شرط تنها تعداد پیکسل است؛ MTF اپتیک باید در فرکانس متناظر هنوز کنتراست کافی داشته باشد.
+
+\subsection{قید محوشدگی حرکت}
+
+جابجایی در نوردهی
+\begin{equation}
+\ell_m=vT
+\end{equation}
+است. اگر بخواهیم محوشدگی کمتر از \(\beta p_o\) باشد:
+\begin{equation}
+T\le\frac{\beta p_o}{v}.
+\label{eq:exposure-motion}
+\end{equation}
+کاهش \(T\) فوتون را کم می‌کند و SNR را پایین می‌آورد؛ بنابراین نورپردازی قوی‌تر یا حسگر کاراتر لازم
+می‌شود.
+
+\subsection{قید SNR و رنگ}
+
+برای تشخیص رنگ، تنها افزایش روشنایی کافی نیست؛ پاسخ طیفی نور، شیء و حسگر باید ماتریس رنگی با شرط
+مناسب بسازد. اگر دو رنگ صنعتی زیر نور انتخابی متامر شوند، طبقه‌بند RGB حتی بدون نویز نیز قادر به
+جداسازی قطعی نیست. افزودن یک یا چند باند باریک ممکن است از افزایش چندبرابری رزولوشن مکانی مفیدتر باشد.
+
+\subsection{تابع هزینه سامانه}
+
+طراحی را می‌توان به‌صورت چندهدفه نوشت:
+\begin{equation}
+\min_{N_x,T,\text{lens},\text{light},\text{bands}}
+\quad
+\alpha_1 P_{\mathrm{miss}}
++\alpha_2 P_{\mathrm{false}}
++\alpha_3 C_{\mathrm{hardware}}
++\alpha_4 C_{\mathrm{compute}}
+\end{equation}
+تحت قیود \eqref{eq:defect-sampling}، \eqref{eq:exposure-motion}، توان نور، دما، نرخ داده و زمان پاسخ.
+این مطالعه نشان می‌دهد فصل دوم مستقیماً به تصمیم مهندسی منتهی می‌شود: «دوربین چند مگاپیکسل؟»
+بدون اندازه عیب، MTF، سرعت، SNR و باند طیفی پرسش ناقصی است.
+
+\section{آزمایش محوری فصل: دفترچه دیجیتالی‌شدن}
+
+\begin{workshopbox}[یک آزمایش، شش شکست کنترل‌شده]
+دانشجو یک صحنه یا الگوی مصنوعی را از ابتدا تا انتها شبیه‌سازی می‌کند. هر مرحله باید ورودی، عملگر،
+فرض، پارامتر و خروجی ذخیره‌شده داشته باشد:
+\begin{enumerate}
+\item ساخت تصویر پیوسته‌نمای پُروضوح شامل صفحه ناحیه‌ای، لبه، گرادیان و رنگ؛
+\item اعمال PSF و انتگرال‌گیری سطح پیکسل؛
+\item نمونه‌برداری با و بدون پیش‌فیلتر و اندازه‌گیری انرژی علیاس؛
+\item تولید فوتون پواسون، نویز خوانش و ADC با بیت‌های مختلف؛
+\item موزاییک RGGB و مقایسه دموزاییک دوخطی با یک روش پیشرفته؛
+\item کدگذاری sRGB/PQ و نشان‌دادن خطای یک عملیات در فضای غیرخطی.
+\end{enumerate}
+برای هر مرحله سه خروجی لازم است: شکل، جدول معیار و توضیح ریاضی اینکه کدام فرض نقض شده است.
+\end{workshopbox}
+
+\subsection{تعریف کمی انرژی علیاس}
+
+اگر طیف مرجع پُروضوح \(F\) و ناحیه باند قابل نمایش \(\mathcal B_N\) باشد، یک معیار پیش از
+نمونه‌برداری:
+\begin{equation}
+\rho_{\mathrm{out}}=
+\frac{\int_{\R^2\setminus\mathcal B_N}\abs{F(\vect\omega)}^2d\vect\omega}
+{\int_{\R^2}\abs{F(\vect\omega)}^2d\vect\omega}
+\end{equation}
+است. پس از نمونه‌برداری، چون مؤلفه‌های تاخورده قابل جداسازی کامل نیستند، می‌توان خروجی را با مرجع
+پیش‌فیلترشده مقایسه کرد:
+\begin{equation}
+E_{\mathrm{alias}}=
+\frac{\norm{y_{\mathrm{naive}}-y_{\mathrm{reference}}}_2^2}
+{\norm{y_{\mathrm{reference}}}_2^2}.
+\end{equation}
+
+\subsection{پروتکل گزارش}
+
+\begin{enumerate}
+\item همه تصاویر میانی به‌صورت float خطی نگهداری شوند؛
+\item تبدیل برای نمایش فقط هنگام ذخیره شکل انجام شود؛
+\item seed تصادفی ثابت و در گزارش ذکر شود؛
+\item واحد نوردهی و الکترون از کد دیجیتال جدا بماند؛
+\item نمودار SNR برحسب فوتون و برحسب کد هر دو رسم شود؛
+\item اشباع و مقادیر بریده‌شده در معیار جدا گزارش شوند؛
+\item کد، محیط اجرا و نسخه کتابخانه‌ها ثبت شود.
+\end{enumerate}
+
+\section{کدهای پایه قابل بازتولید}
+
+\subsection{کاهش اندازه صحیح}
+
+\begin{LTR}
+\begin{lstlisting}
+import numpy as np
+from scipy.ndimage import gaussian_filter
+
+def decimate(image: np.ndarray, factor: int, sigma: float | None = None):
+    """Decimate a linear image with optional prefiltering."""
+    if factor < 1:
+        raise ValueError("factor must be positive")
+    x = np.asarray(image, dtype=np.float64)
+    if sigma is not None:
+        if sigma <= 0:
+            raise ValueError("sigma must be positive")
+        x = gaussian_filter(x, sigma=sigma, mode="reflect")
+    return x[::factor, ::factor]
+
+naive = decimate(image, factor=4)
+antialiased = decimate(image, factor=4, sigma=1.6)
+\end{lstlisting}
+\end{LTR}
+
+\subsection{مدل RAW پواسون ـ گاوسی و ADC}
+
+\begin{LTR}
+\begin{lstlisting}
+import numpy as np
+
+def simulate_raw(
+    irradiance: np.ndarray,
+    photons_full_scale: float,
+    read_noise_e: float,
+    bits: int,
+    rng: np.random.Generator,
+):
+    """Return electrons and quantized code for a normalized linear exposure."""
+    if photons_full_scale <= 0 or read_noise_e < 0 or bits < 1:
+        raise ValueError("invalid sensor parameters")
+    exposure = np.clip(np.asarray(irradiance, float), 0.0, 1.0)
+    mean_e = photons_full_scale * exposure
+    shot_e = rng.poisson(mean_e).astype(float)
+    measured_e = shot_e + rng.normal(0.0, read_noise_e, exposure.shape)
+    measured_e = np.clip(measured_e, 0.0, photons_full_scale)
+    max_code = 2**bits - 1
+    code = np.rint(max_code * measured_e / photons_full_scale).astype(np.uint16)
+    return measured_e, code
+\end{lstlisting}
+\end{LTR}
+
+\subsection{خطی‌سازی sRGB}
+
+\begin{LTR}
+\begin{lstlisting}
+import numpy as np
+
+def srgb_to_linear(encoded: np.ndarray) -> np.ndarray:
+    c = np.clip(np.asarray(encoded, dtype=np.float64), 0.0, 1.0)
+    return np.where(c <= 0.04045,
+                    c / 12.92,
+                    ((c + 0.055) / 1.055) ** 2.4)
+
+def linear_to_srgb(linear: np.ndarray) -> np.ndarray:
+    c = np.clip(np.asarray(linear, dtype=np.float64), 0.0, 1.0)
+    return np.where(c <= 0.0031308,
+                    12.92 * c,
+                    1.055 * c ** (1.0 / 2.4) - 0.055)
+\end{lstlisting}
+\end{LTR}
+
+\section{پرامپت پژوهش‌محور برای Codex}
+
+\begin{workshopbox}[ساخت مخزن آزمایش فصل دوم]
+متن زیر را به Codex بدهید:
+
+\begin{LTR}
+\small
+Create a reproducible Python research repository named
+\texttt{image-digitization-lab}. Implement one end-to-end experiment that starts from a
+high-resolution linear radiance scene and simulates: optical blur, finite pixel aperture,
+spatial sampling, optional anti-alias filtering, Poisson shot noise, Gaussian read noise,
+clipping, b-bit ADC quantization, RGGB mosaicing, bilinear and edge-aware demosaicing,
+white balance, a 3x3 color correction matrix, and sRGB encoding.
+
+The repository must contain typed functions, unit tests, configuration files, deterministic
+random seeds, command-line execution, and a report generator. Produce ablations for sampling
+factor, anti-alias filter bandwidth, photon count, read noise, ADC bit depth, and demosaicer.
+Never compute physical MSE on gamma-encoded data. Report linear-domain MSE/PSNR, saturation
+rate, alias energy relative to a properly prefiltered reference, color error, runtime, and
+estimated storage/data rate. Save every intermediate image in a lossless format and document
+its units and color encoding. Add a final experiment that deliberately performs resizing in
+sRGB space and quantitatively compares it with linear-light resizing. Do not fabricate results:
+run the code and write CSV/JSON tables from actual outputs.
+\end{LTR}
+\end{workshopbox}
+
+\section{تمرین‌های فصل}
+
+\subsection*{الف ـ تمرین‌های اثباتی}
+\begin{enumerate}
+\item رابطه شبکه متقابل \eqref{eq:reciprocal-lattice} را با فرمول جمع پواسون اثبات کنید.
+\item نشان دهید اگر دو سینوس فرکانس‌هایی با اختلاف مضرب صحیح نرخ نمونه‌برداری داشته باشند، نمونه‌های
+آن‌ها یکسان است. حالت فازدار را نیز بررسی کنید.
+\item برای پیکسل مستطیلی، تبدیل فوریه دهانه و مکان صفرهای MTF را استخراج کنید.
+\item شرط \(\Delta^2/12\) را برای چگالی خطی درون سلول تا جمله مرتبه بعدی تقریب بزنید.
+\item شرایط لوید ـ مکس را با مشتق‌گیری نسبت به آستانه‌ها و سطوح بازسازی به‌دست آورید.
+\item ثابت کنید مسئله بازسازی طیف از RGB بدون پیشین یکتا نیست، مگر آنکه طیف به زیر‌فضایی با بعد حداکثر
+سه محدود شود و نگاشت روی آن زیر‌فضا تزریقی باشد.
+\item نشان دهید میانگین‌گیری و تابع گاما جابجاپذیر نیستند و با نابرابری ینسن جهت سوگیری را برای تابع
+مقعر توضیح دهید.
+\item تابع PQ را در نزدیکی صفر و یک تحلیل و حساسیت \(dE'/dY\) را محاسبه کنید.
+\end{enumerate}
+
+\subsection*{ب ـ تمرین‌های محاسباتی}
+\begin{enumerate}
+\item شکل \ref{fig:zoneplate} را با سه فیلتر گاوسی، جعبه‌ای و Lanczos بازتولید و انرژی علیاس را گزارش کنید.
+\item برای بیت‌های ۲ تا ۱۲، MSE کوانتیزه‌سازی رمپ، سینوس و تصویر طبیعی را با \(\Delta^2/12\) مقایسه کنید.
+\item هم‌بستگی خطای کوانتیزه‌سازی با ورودی را با و بدون دیتر اندازه بگیرید.
+\item از چند فریم تخت و تاریک مصنوعی، بهره تبدیل و نویز خوانش را با منحنی انتقال فوتون تخمین بزنید.
+\item یک تصویر RGGB بسازید و خطای دموزاییک را جداگانه روی لبه، بافت و ناحیه صاف گزارش کنید.
+\item یک تصویر را در sRGB و خطی نصف اندازه کنید و اختلاف روشنایی متوسط و لبه‌ها را بسنجید.
+\item دو طیف متامر بسازید و نشان دهید افزودن یک کانال طیفی مناسب چگونه فضای پوچ را کوچک می‌کند.
+\item برای سه نوردهی مصنوعی، تابع پاسخ را با مدل Debevec--Malik برآورد کنید.
+\end{enumerate}
+
+\subsection*{ج ـ تمرین‌های نقد مقاله و استاندارد}
+\begin{enumerate}
+\item مقاله \lr{Sampling---50 Years after Shannon} را بخوانید و سه محدودیت بازگویی ساده قضیه شانون
+در کتاب‌های مقدماتی را استخراج کنید.
+\item از \lr{EMVA 1288 Release 4.0} مشخص کنید کدام کمیت‌ها مستقیماً اندازه‌گیری و کدام محاسبه می‌شوند.
+\item تفاوت هدف PQ و HLG را از متن رسمی \lr{BT.2100-3} توضیح دهید؛ از وبلاگ ثانویه استفاده نکنید.
+\item در مقاله \lr{Unprocessing Images} ترتیب وارون‌سازی ISP و مدل نویز را به نمودار عملگری تبدیل کنید.
+\item مقاله \lr{AF-LDM} را از دید فصل حاضر نقد کنید: کدام بلوک‌ها پهنای باند را تغییر می‌دهند و کدام
+تعریف هم‌وردایی سنجیده می‌شود؟
+\item در ARAD\_1K، تفاوت RGB مصنوعی و دوربین واقعی چه نوع شکاف دامنه‌ای می‌سازد؟ یک پروتکل آزمون
+بین‌دوربینی پیشنهاد دهید.
+\end{enumerate}
+
+\subsection*{د ـ پروژه مهندسی}
+یک دوربین واقعی یا گوشی انتخاب کنید. با فایل RAW در چند ISO و زمان نوردهی، سطح سیاه، اشباع، نویز
+خوانش تقریبی، رابطه واریانس ـ میانگین، خطی‌بودن، تابع پاسخ JPEG و تفاوت رنگ RAW/JPEG را بررسی کنید.
+گزارش باید شامل کد، داده نمونه، عدم‌قطعیت و محدودیت نتیجه باشد. ادعای «دامنه دینامیکی دوربین» بدون
+تعریف آستانه و واحد نمره ندارد.
+
+\section{تقسیم فصل به ویدئوهای ۱۵ دقیقه‌ای}
+
+\begin{videobox}
+\begin{longtable}{p{0.08\textwidth}p{0.34\textwidth}p{0.48\textwidth}}
+\toprule
+بخش & عنوان ویدئو & خروجی قابل تحویل\\
+\midrule
+1 & زنجیره کامل دیجیتالی‌شدن & رسم مدل از تابش تا کد دیجیتال.\\
+2 & شانه دیراک و تکرار طیف & استخراج معادله \eqref{eq:spectral-replication}.\\
+3 & اثبات قضیه شانون & بازسازی سینکی و شرط جدایی نسخه‌ها.\\
+4 & نمونه‌برداری دوبعدی & شبکه متقابل و ناحیه نایکوئیست.\\
+5 & پیکسل و MTF & استخراج پاسخ دهانه مستطیلی.\\
+6 & آزمایش صفحه ناحیه‌ای & مقایسه کاهش نرخ ساده و ضدعلیاس.\\
+7 & علیاسینگ در شبکه عمیق & تحلیل pooling، stride و هم‌وردایی.\\
+8 & کوانتیزه‌سازی یکنواخت & خطای دانه‌ای و اشباع.\\
+9 & استخراج SQNR & رابطه \(6.02b+1.76\).\\
+10 & لوید ـ مکس و دیتر & طراحی کوانتیزه‌کننده و آزمایش خطا.\\
+11 & فوتون و نویز حسگر & پواسون، خوانش و دو رژیم SNR.\\
+12 & دامنه دینامیکی & بیت در برابر الکترون، استاپ و dB.\\
+13 & Bayer و دموزاییک & مدل ماسک و مسئله معکوس.\\
+14 & خط لوله RAW-to-RGB & ترتیب ISP و مدل نویز واقعی.\\
+15 & پاسخ دوربین و HDR & بازیابی تابش چندنوردهی.\\
+16 & ریاضیات رنگ‌سنجی & XYZ، فضای پوچ و متامریسم.\\
+17 & sRGB و محاسبه خطی & خطای میانگین‌گیری در فضای گاما.\\
+18 & PQ، HLG و BT.2100 & مطالعه مستقیم استاندارد جاری.\\
+19 & فراطیفی و ARAD\_1K & بدوضعی RGB-to-spectrum و معیارها.\\
+20 & طراحی سامانه و پروژه & تبدیل روابط فصل به مشخصات دوربین.\\
+\bottomrule
+\end{longtable}
+\end{videobox}
+
+\section{خلاصه دقیق فصل}
+
+\begin{enumerate}
+\item نمونه‌برداری در حوزه مکان ضرب با شانه دیراک و در حوزه فرکانس تکرار طیف است.
+\item شرط شانون درباره سیگنال باند‌محدود و نمونه‌برداری ایده‌آل است؛ دوربین واقعی کرنل اندازه‌گیری دارد.
+\item در دو بعد، هندسه شبکه نمونه‌برداری و شبکه متقابل تعیین می‌کند نسخه‌های طیف چگونه کنار هم قرار گیرند.
+\item دهانه پیکسل یک پیش‌فیلتر فضایی است؛ هموارسازی پس از زیرنمونه‌برداری علیاس رخ‌داده را برنمی‌گرداند.
+\item علیاسینگ در تغییر اندازه، CNN و مدل مولد یک مسئله مشترکِ کنترل پهنای باند است.
+\item مدل \(\Delta^2/12\) و رابطه \(6.02b+1.76\) تنها زیر فرض‌های مشخص معتبرند.
+\item دیتر می‌تواند با افزایش نویز تصادفی، خطای ساختاری و نواربندی را کاهش دهد.
+\item نویز شات وابسته به سیگنال و نویز خوانش تقریباً مستقل از سیگنال است؛ رژیم غالب با نور تغییر می‌کند.
+\item تعداد بیت با دامنه دینامیکی یکی نیست؛ دامنه مفید از اشباع تا آستانه حساسیت تعریف می‌شود.
+\item داده Bayer یک نمونه‌برداری مشترک فضایی ـ طیفی است و دموزاییک مسئله‌ای معکوس است.
+\item عملیات ISP جابجاپذیر نیستند و مدل نویز باید در فضای مناسب زنجیره اعمال شود.
+\item رنگ سه‌مقداری تصویر کامل طیف نیست؛ متامریسم نتیجه فضای پوچ نگاشت طیف به سه عدد است.
+\item sRGB کدگذاری غیرخطی است؛ محاسبات فیزیکی باید در نور خطی انجام شوند.
+\item HDR یک زنجیره از صحنه تا نمایش است و BT.2100-3 دو مسیر PQ و HLG را استاندارد می‌کند.
+\item بازسازی فراطیفی از RGB بدوضع است؛ دقت روی RGB مصنوعی تضمین انتقال به دوربین واقعی نیست.
+\item مهندس حرفه‌ای باید واحد، عملگر، فرض، استاندارد و معیار را همراه هر آرایه عددی ثبت کند.
+\end{enumerate}
+
+\section{واژگان کلیدی فصل}
+
+\begin{longtable}{>{\bfseries}p{0.28\textwidth}p{0.64\textwidth}}
+\toprule
+واژه & تعریف دقیق\\
+\midrule
+\endfirsthead
+\toprule
+واژه & تعریف دقیق\\
+\midrule
+\endhead
+نمونه‌برداری & تبدیل نمایش پیوسته یا پُرتراکم به مقادیر روی یک شبکه یا مجموعه نقاط.\\
+علیاسینگ & غیرقابل‌تشخیص‌شدن مؤلفه‌های متفاوت پس از نمونه‌برداری و تاخوردن طیف‌ها.\\
+شبکه متقابل & شبکه مکان نسخه‌های طیفی حاصل از نمونه‌برداری شبکه‌ای.\\
+MTF & اندازه OTF؛ نسبت انتقال کنتراست برحسب فرکانس مکانی.\\
+کوانتیزه‌سازی & نگاشت دامنه پیوسته یا پُرکد به مجموعه متناهی سطوح بازسازی.\\
+دیتر & نویز کنترل‌شده پیش از کوانتیزه‌سازی برای کاهش ساختار و وابستگی خطا.\\
+نویز شات & نوسان آماری شمارش فوتون/الکترون با واریانس تقریباً برابر میانگین.\\
+نویز خوانش & نویز الکترونیک خواندن حسگر، معمولاً مدل‌شده در واحد الکترون rms.\\
+ظرفیت چاهک کامل & بیشینه تعداد الکترون قابل ذخیره پیش از اشباع یا غیرخطی‌شدن شدید.\\
+دامنه دینامیکی & نسبت بیشینه سیگنال قابل استفاده به کمینه سیگنال قابل تشخیص تحت تعریف مشخص.\\
+RAW & داده نزدیک به خروجی حسگر، معمولاً خطی و موزاییکی، همراه با بایاس و فراداده.\\
+دموزاییک & تخمین کانال‌های مشاهده‌نشده از آرایه فیلتر رنگ.\\
+تابع پاسخ دوربین & نگاشت نوردهی به مقدار کدشده ثبت‌شده.\\
+متامریسم & ایجاد پاسخ رنگی یکسان توسط طیف‌های فیزیکی متفاوت تحت ناظر/نور مشخص.\\
+PQ & تابع انتقال ادراکی HDR با کدگذاری مطلق درخشندگی طبق BT.2100.\\
+HLG & تابع انتقال HDR نسبی و مناسب زنجیره پخش طبق BT.2100.\\
+فراطیفی & تصویربرداری با تعداد زیادی باند طیفی باریک و پیوسته یا نزدیک به پیوسته.\\
+شکاف دامنه & اختلاف آماری یا فیزیکی میان داده آموزش/شبیه‌سازی و سامانه واقعی.\\
+\bottomrule
+\end{longtable}
+
+\backmatter
+\renewcommand{\bibname}{منابع علمی، استانداردها و مقالات فصل دوم}
+\addcontentsline{toc}{chapter}{منابع علمی، استانداردها و مقالات فصل دوم}
+\begin{thebibliography}{99}
+\begin{LTR}
+
+\bibitem{shannon1949communication}
+C. E. Shannon,
+``Communication in the Presence of Noise,''
+\emph{Proceedings of the IRE}, vol. 37, no. 1, pp. 10--21, 1949.
+
+\bibitem{unser2000sampling}
+M. Unser,
+``Sampling---50 Years after Shannon,''
+\emph{Proceedings of the IEEE}, vol. 88, no. 4, pp. 569--587, 2000.
+
+\bibitem{papoulis1977generalized}
+A. Papoulis,
+``Generalized Sampling Expansion,''
+\emph{IEEE Transactions on Circuits and Systems}, vol. 24, no. 11, pp. 652--654, 1977.
+
+\bibitem{unser2000generalized}
+M. Unser and A. Aldroubi,
+``A General Sampling Theory for Nonideal Acquisition Devices,''
+\emph{IEEE Transactions on Signal Processing}, vol. 42, no. 11, pp. 2915--2925, 1994.
+
+\bibitem{unser1999splines}
+M. Unser,
+``Splines: A Perfect Fit for Signal and Image Processing,''
+\emph{IEEE Signal Processing Magazine}, vol. 16, no. 6, pp. 22--38, 1999.
+
+\bibitem{gonzalez2018dip}
+R. C. Gonzalez and R. E. Woods,
+\emph{Digital Image Processing}, 4th ed., Pearson, 2018.
+
+\bibitem{oppenheim1999dsp}
+A. V. Oppenheim, R. W. Schafer, and J. R. Buck,
+\emph{Discrete-Time Signal Processing}, 2nd ed., Prentice Hall, 1999.
+
+\bibitem{max1960quantizing}
+J. Max,
+``Quantizing for Minimum Distortion,''
+\emph{IRE Transactions on Information Theory}, vol. 6, no. 1, pp. 7--12, 1960.
+
+\bibitem{lloyd1982least}
+S. P. Lloyd,
+``Least Squares Quantization in PCM,''
+\emph{IEEE Transactions on Information Theory}, vol. 28, no. 2, pp. 129--137, 1982.
+
+\bibitem{lbg1980vq}
+Y. Linde, A. Buzo, and R. M. Gray,
+``An Algorithm for Vector Quantizer Design,''
+\emph{IEEE Transactions on Communications}, vol. 28, no. 1, pp. 84--95, 1980.
+
+\bibitem{gray1998quantization}
+R. M. Gray and D. L. Neuhoff,
+``Quantization,''
+\emph{IEEE Transactions on Information Theory}, vol. 44, no. 6, pp. 2325--2383, 1998.
+
+\bibitem{emva1288r4}
+European Machine Vision Association,
+\emph{EMVA Standard 1288, Release 4.0: Standard for Characterization of Image Sensors and Cameras}, 2021.
+
+\bibitem{janesick2007photon}
+J. R. Janesick,
+\emph{Photon Transfer: DN $\to$ $\lambda$}, SPIE Press, 2007.
+
+\bibitem{bayer1976patent}
+B. E. Bayer,
+``Color Imaging Array,'' U.S. Patent 3,971,065, 1976.
+
+\bibitem{malvar2004demosaic}
+H. S. Malvar, L. He, and R. Cutler,
+``High-Quality Linear Interpolation for Demosaicing of Bayer-Patterned Color Images,''
+\emph{Proceedings of ICASSP}, vol. 3, pp. 485--488, 2004.
+
+\bibitem{brooks2019unprocessing}
+T. Brooks, B. Mildenhall, T. Xue, J. Chen, D. Sharlet, and J. T. Barron,
+``Unprocessing Images for Learned Raw Denoising,''
+\emph{CVPR}, pp. 11036--11045, 2019.
+
+\bibitem{ehret2019joint}
+T. Ehret, A. Davy, P. Arias, and G. Facciolo,
+``Joint Demosaicking and Denoising by Fine-Tuning of Bursts of Raw Images,''
+\emph{ICCV}, pp. 8868--8877, 2019.
+
+\bibitem{grossberg2003crf}
+M. D. Grossberg and S. K. Nayar,
+``What Is the Space of Camera Response Functions?''
+\emph{CVPR}, vol. 2, pp. II-602--II-609, 2003.
+
+\bibitem{debevec1997hdr}
+P. E. Debevec and J. Malik,
+``Recovering High Dynamic Range Radiance Maps from Photographs,''
+\emph{Proceedings of SIGGRAPH}, pp. 369--378, 1997.
+
+\bibitem{mitsunaga1999radiometric}
+T. Mitsunaga and S. K. Nayar,
+``Radiometric Self Calibration,''
+\emph{CVPR}, vol. 1, pp. 374--380, 1999.
+
+\bibitem{cie2019observer}
+CIE,
+\emph{ISO/CIE 11664-1:2019, Colorimetry---Part 1: CIE Standard Colorimetric Observers}, 2019.
+
+\bibitem{cie2018colorimetry}
+CIE,
+\emph{CIE 15:2018, Colorimetry}, 4th ed., 2018.
+
+\bibitem{iec61966srgb}
+IEC,
+\emph{IEC 61966-2-1:1999, Multimedia Systems and Equipment---Colour Measurement and Management---Part 2-1: Default RGB Colour Space---sRGB}, 1999.
+
+\bibitem{iturbt709}
+ITU-R,
+\emph{Recommendation BT.709-6: Parameter Values for the HDTV Standards for Production and International Programme Exchange}, 2015.
+
+\bibitem{iturbt2020}
+ITU-R,
+\emph{Recommendation BT.2020-2: Parameter Values for Ultra-High Definition Television Systems for Production and International Programme Exchange}, 2015.
+
+\bibitem{iturbt2100_3}
+ITU-R,
+\emph{Recommendation BT.2100-3: Image Parameter Values for High Dynamic Range Television for Use in Production and International Programme Exchange}, Feb. 2025.
+
+\bibitem{zhang2019shift}
+R. Zhang,
+``Making Convolutional Networks Shift-Invariant Again,''
+\emph{Proceedings of the 36th International Conference on Machine Learning},
+PMLR 97, pp. 7324--7334, 2019.
+
+\bibitem{karras2021stylegan3}
+T. Karras et al.,
+``Alias-Free Generative Adversarial Networks,''
+\emph{Advances in Neural Information Processing Systems}, vol. 34, pp. 852--863, 2021.
+
+\bibitem{zhou2025afldm}
+Y. Zhou, Z. Xiao, S. Yang, and X. Pan,
+``Alias-Free Latent Diffusion Models: Improving Fractional Shift Equivariance of Diffusion Latent Space,''
+\emph{CVPR}, pp. 34--44, 2025.
+
+\bibitem{parmar2022aliased}
+G. Parmar, R. Zhang, and J.-Y. Zhu,
+``On Aliased Resizing and Surprising Subtleties in GAN Evaluation,''
+\emph{CVPR}, pp. 11410--11420, 2022.
+
+\bibitem{arad2022ntire}
+B. Arad et al.,
+``NTIRE 2022 Spectral Recovery Challenge and Data Set,''
+\emph{CVPR Workshops}, pp. 863--881, 2022.
+
+\bibitem{cai2022mst}
+Y. Cai, J. Lin, Z. Lin, H. Wang, Y. Zhang, H. Pfister, R. Timofte, and L. Van Gool,
+``MST++: Multi-Stage Spectral-Wise Transformer for Efficient Spectral Reconstruction,''
+\emph{CVPR Workshops}, pp. 745--755, 2022.
+
+\bibitem{zhang2022survey}
+J. Zhang, R. Su, W. Ren, Q. Fu, F. Heide, and Y. Nie,
+``A Survey on Computational Spectral Reconstruction Methods from RGB to Hyperspectral Imaging,''
+\emph{Scientific Reports}, vol. 12, article 11905, 2022.
+
+\bibitem{szeliski2022cv}
+R. Szeliski,
+\emph{Computer Vision: Algorithms and Applications}, 2nd ed., Springer, 2022.
+
+\bibitem{reinhard2010color}
+E. Reinhard, E. A. Khan, A. O. Akyüz, and G. M. Johnson,
+\emph{Color Imaging: Fundamentals and Applications}, A K Peters/CRC Press, 2008.
+
+\bibitem{fairchild2013appearance}
+M. D. Fairchild,
+\emph{Color Appearance Models}, 3rd ed., Wiley, 2013.
+
+\end{LTR}
+\end{thebibliography}
+
+\end{document}
