@@ -1,0 +1,6 @@
+operation,foreground_area,components,euler_number
+input,14045,3,2.0
+dilation,22293,2,1.0
+erosion,6988,4,4.0
+opening,13085,4,4.0
+closing,14252,2,1.0

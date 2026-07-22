@@ -1,0 +1,15 @@
+{
+  "environment": {
+    "python": "3.13.5",
+    "platform": "Linux-6.12.13-x86_64-with-glibc2.41",
+    "opencv": "4.13.0",
+    "numpy": "2.3.5"
+  },
+  "ransac_demo": {
+    "inliers": 105,
+    "total": 145,
+    "estimated_slope": 1.7887866628300233,
+    "estimated_intercept": 1.5024113388278988
+  },
+  "notes": "Synthetic educational results; not a published benchmark."
+}

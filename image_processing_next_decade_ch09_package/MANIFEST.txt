@@ -1,0 +1,10 @@
+image_processing_next_decade_ch09_fa.tex
+image_processing_next_decade_ch09_fa.pdf
+generate_figures.py
+chapter09_experiments.py
+requirements.txt
+README_FA.md
+figures/*.pdf
+figures/*.png
+outputs/feature_matching_synthetic.csv
+outputs/summary.json

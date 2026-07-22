@@ -1,0 +1,8 @@
+image_processing_next_decade_ch08_fa.tex   متن اصلی فصل
+image_processing_next_decade_ch08_fa.pdf   PDF کامپایل‌شده
+figures/                                   شکل‌های PDF و PNG بازتولیدپذیر
+generate_figures.py                        تولید همه شکل‌های فصل
+chapter08_experiments.py                   آزمایش مستقل و قابل اجرا
+outputs/threshold_metrics.csv              نمونه خروجی عددی
+requirements.txt                           وابستگی‌های پایتون
+README_FA.md                               راهنمای فارسی
