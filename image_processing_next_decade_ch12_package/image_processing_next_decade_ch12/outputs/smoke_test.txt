@@ -1,0 +1,45 @@
+## vae_minimal.py
+seconds=3.623
+{'loss': 44.16879653930664, 'recon': 44.152706146240234, 'kl': 0.01608908735215664}
+exit=0
+
+## vq_vae_minimal.py
+seconds=0.019
+{'loss': 0.08717787265777588, 'perplexity': 17.1898250579834, 'used_codes': 23}
+exit=0
+
+## gan_minimal.py
+seconds=0.065
+{'d_loss': 1.4034106731414795, 'g_loss': 0.7546062469482422, 'sample_std': [0.08185617625713348, 0.04070109501481056]}
+exit=0
+
+## wgan_gp_minimal.py
+seconds=0.006
+{'critic_loss': 7.129523277282715, 'gradient_penalty': 0.7078915238380432}
+exit=0
+
+## realnvp_2d.py
+seconds=0.009
+{'reconstruction_max_error': 2.384185791015625e-07, 'mean_logdet': 0.0763072669506073, 'nll': 3.2138054370880127}
+exit=0
+
+## pixelcnn_mask.py
+seconds=0.012
+{'output_shape': [2, 16, 8, 8], 'causality_test_max_delta': 0.0}
+exit=0
+
+## fid_kid_toy.py
+seconds=0.118
+{'fid_good': 4.799810974220806, 'fid_bad': 32.0762127981295, 'kid_good': 0.010789117688180472, 'kid_bad': 1.009460227815087}
+exit=0
+
+## latent_interpolation.py
+seconds=0.004
+{'linear_norms': [3.659, 3.264, 3.064, 3.097, 3.356, 3.795, 4.36], 'spherical_norms': [3.659, 3.729, 3.859, 4.02, 4.176, 4.296, 4.36]}
+exit=0
+
+## flow_matching_2d.py
+seconds=0.102
+{'flow_matching_loss': 2.7198173999786377}
+exit=0
+

@@ -1,0 +1,40 @@
+# Chapter 11 smoke tests
+Wed Jul 22 17:18:28 UTC 2026
+
+## code/patchify.py
+{'tokens': (2, 24, 192), 'max_reconstruction_error': 0.0}
+
+## code/minimal_vit.py
+{'output': (2, 10), 'parameters': 1803850, 'loss': 0.37512442469596863}
+
+## code/info_nce.py
+{'aligned_loss': 0.1281937062740326, 'random_loss': 2.5999865531921387}
+
+## code/simclr_minimal.py
+{'one_step_loss': 3.346510171890259, 'embedding_shape': (32, 128)}
+
+## code/mae_minimal.py
+/mnt/data/Image_Processing_Next_Decade_Chapter_11_FA/code/mae_minimal.py:28: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.encoder = nn.TransformerEncoder(layer, 2)
+/mnt/data/Image_Processing_Next_Decade_Chapter_11_FA/code/mae_minimal.py:32: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.decoder = nn.TransformerEncoder(dec, 1)
+{'loss': 1.0460091829299927, 'prediction': (8, 64, 48), 'masked_fraction': 0.75}
+
+## code/dino_ema.py
+{'loss': 6.71273136138916, 'student_teacher_mean_delta': 0.003983878530561924}
+
+## code/native_resolution_pack.py
+{'packed': (44, 32), 'lengths': [12, 7, 20, 5], 'allowed_fraction': 0.3192148804664612}
+
+## code/benchmark_attention.py --tokens 64
+{
+  "tokens": 64,
+  "head_dim": 64,
+  "heads": 4,
+  "median_ms": 0.04305499896872789,
+  "backend": "cpu"
+}
+
+## code/inspect_pretrained.py (optional dependency)
+Install timm first: pip install timm
+Status: skipped in the base environment because timm is optional and is listed in requirements.txt.
